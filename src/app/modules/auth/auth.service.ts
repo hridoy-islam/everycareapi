@@ -180,7 +180,6 @@ const refreshToken = async (token: string) => {
       authorized: foundUser?.authorized,
       isValided: foundUser?.isValided,
       isCompleted: foundUser?.isCompleted,
-      studentType: foundUser?.studentType,
     };
 
     // Generate new access token

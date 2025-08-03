@@ -159,13 +159,33 @@ export interface emergencyContactData {
   emergencyRelationship: string;
 }
 
+
+export interface EnglishQualification {
+  englishTestType?: string;
+  englishTestScore?: string;
+  englishTestDate?: Date;
+  englishCertificate?: string;
+}
+
+export interface Referee {
+  name?: string;
+  organisation?: string;
+  address?: string;
+  relationship?: string;
+  otherRelationship?: string;
+  email?: string;
+  phone?: string;
+}
+
+
+
 export interface TUser {
   _id: Types.ObjectId;
   name: string;
   email: string;
   password: string;
   role: "user" | "admin" | "student" | "applicant";
-  status: "block" | "active"; // assuming UserStatus enum includes these
+  status: "block" | "active";
   isDeleted: boolean;
   authorized: boolean;
   address?: string;
@@ -174,46 +194,38 @@ export interface TUser {
   googleUid?: string;
   otp?: string;
   refreshToken?: string;
-  otpExpiry: Date;
+  otpExpiry?: Date;
   isUsed: boolean;
   isValided: boolean;
   isCompleted: boolean;
   userAgentInfo: UserAgentInfo[];
 
-  // Personal Details (flattened)
+  // Personal Info
   title?: string;
   firstName?: string;
   lastName?: string;
   otherName?: string;
-  initial: string;
-  gender?: string;
+  initial?: string;
   dateOfBirth?: Date;
   nationality?: string;
-  ethnicity?: string;
-  customEthnicity?: string;
+  countryOfResidence?: string;
   countryOfBirth?: string;
-  maritalStatus?: string;
-  studentType?: string;
-  requireVisa?: string;
-  countryOfDomicile?: string;
-  isBritishCitizen?: string;
   shareCode?: string;
-  nationalInsuranceNumber: string;
-  countryOfResidence: string;
-  
+  nationalInsuranceNumber?: string;
 
-  // Address Data (flattened)
-  residentialAddressLine1?: string;
-  residentialAddressLine2?: string;
-  residentialCity?: string;
-  residentialPostCode?: string;
-  residentialCountry?: string;
-  sameAsResidential?: boolean;
+  // Postal Address
   postalAddressLine1?: string;
   postalAddressLine2?: string;
   postalCity?: string;
   postalPostCode?: string;
   postalCountry?: string;
+
+  // Previous Address
+  prevPostalAddressLine1?: string;
+  prevPostalAddressLine2?: string;
+  prevPostalCity?: string;
+  prevPostalPostCode?: string;
+  prevPostalCountry?: string;
 
   // Emergency Contact
   emergencyContactNumber?: string;
@@ -222,33 +234,18 @@ export interface TUser {
   emergencyRelationship?: string;
   emergencyAddress?: string;
 
-  // Compliance
-  startDateInUK?: Date;
-  niNumber?: string;
-  immigrationStatus?: string;
-  ltrCode?: string;
-  disability?: string;
-  disabilityDetails?: string;
-  benefits?: string;
-  criminalConviction?: string;
-  convictionDetails?: string;
-  studentFinance?: string;
-
-  // Documents
-  hasPassport?: boolean;
-  passportNumber?: string;
-  passportExpiry?: string;
-  idDocument?: string[]; // was any, updated to string[]
-  hasCertificates?: boolean;
-  certificatesDetails?: string;
-  qualificationCertificates?: string[];
-  cvResume?: string;
-  hasProofOfAddress?: boolean;
-  proofOfAddressType?: string;
-  proofOfAddressDate?: string;
-  proofOfAddress?: string[];
-  otherDocuments?: string[];
-  otherDocumentsDescription?: string;
+  // Application & Career
+  source?: string;
+  referralEmployee?: string;
+  availableFromDate?: Date;
+  isOver18?: boolean;
+  isSubjectToImmigrationControl?: boolean;
+  canWorkInUK?: boolean;
+  availability?: {
+    [day: string]: boolean;
+  };
+  isStudent?: boolean;
+  isUnderStatePensionAge?: boolean;
 
   // Employment
   isEmployed: string;
@@ -261,6 +258,7 @@ export interface TUser {
     supervisor?: string;
     contactPermission?: string;
   };
+  hasPreviousEmployment?: string;
   previousEmployments?: {
     employer: string;
     jobTitle: string;
@@ -270,67 +268,47 @@ export interface TUser {
     responsibilities: string;
     contactPermission: string;
   }[];
-  hasEmploymentGaps: string;
+  hasEmploymentGaps?: string;
   employmentGapsExplanation?: string;
-  declaration: boolean;
-
-  // Terms
-  acceptTerms: boolean;
-  acceptDataProcessing: boolean;
 
   // Education
   educationData: {
     institution: string;
     qualification: string;
     awardDate: Date;
-    certificate?: string | null;
-    transcript?: string | null;
+    grade?: string;
+    certificate?: string;
   }[];
 
-  // Application Data
-  availableFromDate?: Date;
-  source?: string;
-  applicationLocation?: string;
+  // English Qualification
+  englishQualification?: EnglishQualification;
 
-  // Weekly Availability
-  availability?: {
-    [day: string]: boolean; // e.g. { Monday: true, Tuesday: false }
-  };
-
-  // Student and Pension Age
-  isStudent?: boolean;
-  isUnderStatePensionAge?: boolean;
-
-  // Referral Info
-  referralEmployee?: string;
-
-  // Career Section Flags
-  declarationCorrectUpload?: boolean;
-  declarationContactReferee?: boolean;
-  appliedBefore?: boolean;
-
-  // Disability and Adjustment Info
+  // Disability
   hasDisability?: boolean;
+  disabilityDetails?: string;
   needsReasonableAdjustment?: boolean;
   reasonableAdjustmentDetails?: string;
 
-  // Referee Info (optional block)
-  referee?: {
-    name: string;
-    organisation: string;
-    address: string;
-    relationship: string;
-    otherRelationship?: string;
-    email: string;
-    phone: string;
-  };
-  documents?: {
-    type: DocumentType;
-    fileUrl: string; // or filePath
-    customTitle?: string;
-  }[];
+  // References
+  referee1?: Referee;
+  referee2?: Referee;
 
-  // TODO: Add missing `englishQualification` once structure is fully visible
+  // Documents
+  proofOfAddress: string[];
+  passport: string[];
+  immigrationDocument: string[];
+  workExperience: string[];
+  bankStatement: string[];
+  personalStatement: string[];
+
+  // Terms & Declarations
+  declarationCorrectUpload?: boolean;
+  declarationContactReferee?: boolean;
+  criminalConviction?: boolean;
+  criminalConvictionDetails?: string;
+  appliedBefore?: boolean;
+  dataProcessingAccepted?: boolean;
+  termsAccepted?: boolean;
 
   createdAt?: Date;
   updatedAt?: Date;

@@ -22,7 +22,7 @@ const getAllJobApplicationFromDB = async (query: Record<string, unknown>) => {
     }),
     processedQuery
   )
-    .filter()
+    .filter(query)
     .sort()
     .paginate()
     .fields();
@@ -58,6 +58,13 @@ const updateJobApplicationIntoDB = async (
   return result;
 };
 
+
+interface PopulatedJobApplication extends Omit<TJobApplication, "jobId" | "applicantId"> {
+  jobId: { jobTitle: string };
+  applicantId: { name: string; email: string };
+}
+
+
 const createJobApplicationIntoDB = async (
   payload: Partial<TJobApplication>
 ) => {
@@ -81,8 +88,8 @@ const createJobApplicationIntoDB = async (
   const result = await JobApplication.create(payload);
 
   const populatedResult = await JobApplication.findById(result._id)
-    .populate<{ jobTitle: string }>("jobId", "jobTitle")
-    .populate<{ name: string; email: string }>("applicantId", "name email");
+    .populate("jobId", "jobTitle")
+    .populate("applicantId", "name email") as unknown as PopulatedJobApplication;
 
   if (!populatedResult) {
     throw new Error("Failed to populate job application");
