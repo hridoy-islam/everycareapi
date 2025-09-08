@@ -135,8 +135,8 @@ const userSchema = new Schema<TUser, UserModel>(
     emergencyAddress: { type: String },
 
     // Career/Application
-  availableFromDate: { type: Date},
-    source: { type: String},
+    availableFromDate: { type: Date },
+    source: { type: String },
     referralEmployee: { type: String },
 
     availability: {
@@ -149,28 +149,26 @@ const userSchema = new Schema<TUser, UserModel>(
       sunday: { type: Boolean },
     },
 
-    isStudent: { type: Boolean},
-    isUnderStatePensionAge: { type: Boolean},
-    isOver18: { type: Boolean},
-    isSubjectToImmigrationControl: { type: Boolean},
-    canWorkInUK: { type: Boolean},
+    isStudent: { type: Boolean },
+    isUnderStatePensionAge: { type: Boolean },
+    isOver18: { type: Boolean },
+    isSubjectToImmigrationControl: { type: Boolean },
+    canWorkInUK: { type: Boolean },
 
-    competentInOtherLanguage: { type: Boolean},
+    competentInOtherLanguage: { type: Boolean },
     otherLanguages: [{ type: String }],
 
-    drivingLicense: { type: Boolean},
+    drivingLicense: { type: Boolean },
     licenseNumber: { type: String },
 
-    carOwner: { type: Boolean},
-    travelAreas: { type: String},
+    carOwner: { type: Boolean },
+    travelAreas: { type: String },
 
-    solelyForEverycare: { type: Boolean},
+    solelyForEverycare: { type: Boolean },
     otherEmployers: { type: String },
 
-    professionalBody: { type: Boolean},
+    professionalBody: { type: Boolean },
     professionalBodyDetails: { type: String },
-
-
 
     // Employment
     isEmployed: { type: String },
@@ -232,7 +230,11 @@ const userSchema = new Schema<TUser, UserModel>(
     ethnicityGroup: { type: String },
     ethnicityValue: { type: String },
     ethnicityOther: { type: String },
-
+    //Disablity
+    hasDisability: { type: Boolean },
+    disabilityDetails: { type: String },
+    needsReasonableAdjustment: { type: Boolean },
+    reasonableAdjustmentDetails: { type: String },
     // Life Skills & Experience
     lifeSkillsAndInterests: { type: String },
     relevantExperience: { type: String },
@@ -283,7 +285,7 @@ const userSchema = new Schema<TUser, UserModel>(
     personalStatement: { type: [String], default: [] },
 
     // Health & Medical
-    sex:{type: String},
+    sex: { type: String },
     advisedMedicalWorkRestriction: { type: Boolean },
     advisedMedicalWorkRestrictionComment: { type: String },
     undueFatigue: { type: Boolean },
@@ -397,16 +399,15 @@ const userSchema = new Schema<TUser, UserModel>(
     inocOtherComment: { type: String },
     daysSickLastYear: { type: String },
 
-
     houseNumberOrName: { type: String },
-postCode: { type: String },
-jobRole: { type: String },
-otherJobRole: { type: String },
-accountNumber: { type: String },
-sortCode: { type: String },
-bankName: { type: String },
-branchName: { type: String },
-buildingSocietyRollNo: { type: String },
+    postCode: { type: String },
+    jobRole: { type: String },
+    otherJobRole: { type: String },
+    accountNumber: { type: String },
+    sortCode: { type: String },
+    bankName: { type: String },
+    branchName: { type: String },
+    buildingSocietyRollNo: { type: String },
 
     // Consent & Declarations
     declarationCorrectUpload: { type: Boolean },
@@ -435,7 +436,6 @@ buildingSocietyRollNo: { type: String },
   }
 );
 
-
 userSchema.statics.hashPassword = async function (
   plainTextPassword: string
 ): Promise<string> {
@@ -462,7 +462,7 @@ userSchema.pre("save", async function (next) {
 });
 
 // set '' after saving password
-userSchema.post("save", function (doc:any, next) {
+userSchema.post("save", function (doc: any, next) {
   doc.password = "";
   next();
 });

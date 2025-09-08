@@ -346,6 +346,13 @@ export interface TUser {
   // -----------------------
   // Life Skills & Experience
   // -----------------------
+  hasDisability: boolean ,
+    disabilityDetails: string ,
+    needsReasonableAdjustment: boolean ,
+    reasonableAdjustmentDetails: string,
+  // -----------------------
+  // Life Skills & Experience
+  // -----------------------
   lifeSkillsAndInterests?: string;
   relevantExperience?: string;
 
