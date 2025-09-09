@@ -9,7 +9,7 @@ const storage = new Storage({
   keyFilename: "./work.json",
   projectId: "vast-pride-453709-n7",
 });
-const bucketName = "watney";
+const bucketName = "everycare";
 const bucket = storage.bucket(bucketName);
 
 const UploadDocumentToGCS = async (file: any, payload: any) => {

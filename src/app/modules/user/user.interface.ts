@@ -368,7 +368,6 @@ export interface TUser {
   // -----------------------
   cvResume?: string;
   idDocuments?: string[];
-  passportPhotos?: string[];
   utilityBills?: string[];
   bankStatement?: string[];
   proofOfNI?: string[];
@@ -515,7 +514,7 @@ export interface TUser {
   termsAccepted?: boolean;
   dataProcessingAccepted?: boolean;
   consentMedicalDeclaration?: boolean;
-  consentDataProtection?: boolean;
+  // consentDataProtection?: boolean;
   consentVaccination?: boolean;
   consentTerminationClause?: boolean;
 

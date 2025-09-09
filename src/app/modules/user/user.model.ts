@@ -274,7 +274,6 @@ const userSchema = new Schema<TUser, UserModel>(
     // Documents
     cvResume: { type: String },
     idDocuments: { type: [String], default: [] },
-    passportPhotos: { type: [String], default: [] },
     utilityBills: { type: [String], default: [] },
     bankStatement: { type: [String], default: [] },
     proofOfNI: { type: [String], default: [] },
@@ -423,7 +422,7 @@ const userSchema = new Schema<TUser, UserModel>(
     termsAccepted: { type: Boolean },
     dataProcessingAccepted: { type: Boolean },
     consentMedicalDeclaration: { type: Boolean },
-    consentDataProtection: { type: Boolean },
+    // consentDataProtection: { type: Boolean },
     consentVaccination: { type: Boolean },
     consentTerminationClause: { type: Boolean },
 
