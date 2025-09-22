@@ -215,13 +215,12 @@ const userSchema = new Schema<TUser, UserModel>(
     // Training
     trainingData: {
       type: [
-        {
-          name: { type: String },
-          address: { type: String },
-          from: { type: Date },
-          to: { type: Date },
-          qualification: { type: String },
-        },
+         {
+      trainingName: { type: String },
+      awardingBody: { type: String },
+      completionDate: { type: Date },
+      certificate: { type: String }, 
+    },
       ],
       default: [],
     },
@@ -273,6 +272,8 @@ const userSchema = new Schema<TUser, UserModel>(
 
     // Documents
     cvResume: { type: String },
+    proofOfAddress1: { type: String },
+    proofOfAddress2: { type: String },
     idDocuments: { type: [String], default: [] },
     utilityBills: { type: [String], default: [] },
     bankStatement: { type: [String], default: [] },

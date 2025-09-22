@@ -7,6 +7,8 @@ import AppError from "../../errors/AppError";
 import { application } from "express";
 import mongoose from "mongoose";
 import { sendEmail } from "../../utils/sendEmail";
+import { sendEmailAdmin } from "../../utils/sendEmailAdmin";
+import moment from "moment";
 
 const getAllJobApplicationFromDB = async (query: Record<string, unknown>) => {
   const { searchTerm, ...otherQueryParams } = query;
@@ -89,7 +91,7 @@ const createJobApplicationIntoDB = async (
 
   const populatedResult = await JobApplication.findById(result._id)
     .populate("jobId", "jobTitle")
-    .populate("applicantId", "name email") as unknown as PopulatedJobApplication;
+    .populate("applicantId", "name email availableFromDate phone dateOfBirth countryOfResidence") as unknown as PopulatedJobApplication;
 
   if (!populatedResult) {
     throw new Error("Failed to populate job application");
@@ -99,8 +101,24 @@ const createJobApplicationIntoDB = async (
   const applicantName = populatedResult?.applicantId?.name;
   const applicantEmail = populatedResult?.applicantId?.email;
 
-  const emailSubject = `New Application for ${title}`;
+  const emailSubject = `Thank you for applying to Everycare`;
   const otp = "";
+
+
+    const phone = (populatedResult?.applicantId as any)?.phone;
+const countryOfResidence = (populatedResult?.applicantId as any)?.countryOfResidence;
+const formattedCountryOfResidence = countryOfResidence
+  ? countryOfResidence.charAt(0).toUpperCase() + countryOfResidence.slice(1)
+  : '';
+ 
+  const dob = (populatedResult?.applicantId as any)?.dateOfBirth;
+  const formattedDob = dob ? moment(dob).format("DD MMM, YYYY") : "N/A";
+  const availableFromDate = (populatedResult?.applicantId as any)?.availableFromDate;
+  const formattedAvailableFromDate= availableFromDate ? moment(availableFromDate).format("DD MMM, YYYY") : "N/A";
+  const adminSubject = `New Application Received: ${title}`;
+
+
+  
   await sendEmail(
     applicantEmail,
     "job-application",
@@ -108,6 +126,20 @@ const createJobApplicationIntoDB = async (
     applicantName,
     otp,
     title
+  );
+
+      await sendEmailAdmin(
+    "admin@everycareromford.co.uk",
+    "job-application-admin",
+    adminSubject,
+    applicantName,
+    otp,
+    title,
+    applicantEmail,
+    phone,
+    formattedCountryOfResidence,
+    formattedDob,
+    formattedAvailableFromDate
   );
 
   return result;

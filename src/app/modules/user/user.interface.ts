@@ -328,14 +328,12 @@ export interface TUser {
   // -----------------------
   // Training
   // -----------------------
-  trainingData?: {
-    name: string;
-    address: string;
-    from: Date | null;
-    to: Date | null;
-    qualification?: string;
-  }[];
-
+trainingData?: {
+  trainingName: string;
+  awardingBody: string;
+  completionDate: Date | null;
+  certificate?: string; 
+}[];
   // -----------------------
   // Ethnicity
   // -----------------------
@@ -367,6 +365,8 @@ export interface TUser {
   // Documents
   // -----------------------
   cvResume?: string;
+  proofOfAddress1?: string;
+  proofOfAddress2?: string;
   idDocuments?: string[];
   utilityBills?: string[];
   bankStatement?: string[];

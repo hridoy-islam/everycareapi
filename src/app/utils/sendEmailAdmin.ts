@@ -2,16 +2,21 @@ import nodemailer from "nodemailer";
 import ejs from "ejs";
 import config from "../config";
 
-export const sendEmail = async (
+export const sendEmailAdmin = async (
   to: string,
   template: string,
   subject: string,
   name: string,
   otp?: string,
-  title?: string
+  title?: string,
+  applicantEmail?: string,
+  phone?: string,
+  countryOfResidence?: string,
+  dob?:string,
+  availableFromDate?:string
 ) => {
   const transporter = nodemailer.createTransport({
-    host: "mail.watneycollege.co.uk",
+     host: "mail.watneycollege.co.uk",
     port: 465,
     secure: true,
     auth: {
@@ -27,6 +32,11 @@ export const sendEmail = async (
         otp: otp,
         name: name,
         title: title,
+        phone: phone,
+        email:applicantEmail,
+        countryOfResidence: countryOfResidence,
+        dob: dob,
+        availableFromDate: availableFromDate,
       }
     );
     const mailOptions = {

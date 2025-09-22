@@ -46,58 +46,6 @@ const checkLogin = async (payload: TLogin, req: any) => {
     }
 
     
-    // Get the client's IP address
-    const ipAddress = requestIp.getClientIp(req);
-    if (!ipAddress) {
-      console.error("Could not retrieve IP address from request.");
-      throw new AppError(
-        httpStatus.INTERNAL_SERVER_ERROR,
-        "IP address retrieval failed"
-      );
-    }
-
-    // Parse user agent
-    const parser = new UAParser.UAParser(req.headers["user-agent"]);
-    const uaResult = parser.getResult();
-
-    // Create device fingerprint
-    const deviceFingerprint = crypto
-      .createHash("sha256")
-      .update(req.headers["user-agent"] + req.headers["accept-language"])
-      .digest("hex");
-
-    // Prepare user agent info object
-    const userAgentInfo = {
-      browser: {
-        name: uaResult.browser.name,
-        version: uaResult.browser.version,
-      },
-      os: {
-        name: uaResult.os.name,
-        version: uaResult.os.version,
-      },
-      device: {
-        model: uaResult.device?.model || "Desktop",
-        type: uaResult.device?.type || "desktop",
-        vendor: uaResult.device?.vendor || "unknown",
-      },
-      cpu: {
-        architecture: uaResult.cpu.architecture,
-      },
-      ipAddress: ipAddress,
-      macAddress: deviceFingerprint,
-      timestamp: new Date(),
-    };
-
-    // Update user with new login info
-    // await User.findByIdAndUpdate(foundUser._id, {
-    //   $push: {
-    //     userAgentInfo: userAgentInfo,
-    //   },
-    // });
-
-    // Prepare JWT payload
-
 
     // If user is not authorized, generate OTP and send it
     if (!foundUser.isValided) {
@@ -298,12 +246,12 @@ const createUserIntoDB = async (payload: TCreateUser) => {
     //   otp
     // );
 
-    // await sendEmail(
-    //   payload.email,
-    //   "welcome_template",
-    //   "Welcome to Task Planner",
-    //   payload.name
-    // );
+    await sendEmail(
+      payload.email,
+      "welcome_template",
+      "Welcome to Everycare",
+      payload.name
+    );
   } catch (error) {
     console.error("Error sending welcome email:", error);
   }
@@ -323,15 +271,9 @@ const EmailSendOTP = async (email: string) => {
     otpExpiry,
     isUsed: false,
   });
-  const emailSubject = "Your Password Reset OTP";
+ const emailSubject = "Everycare OTP – Please Verify Your Account";
 
-  await sendEmail(
-    email,
-    "reset_password_template",
-    emailSubject,
-    foundUser.name,
-    otp
-  );
+  await sendEmail(email, "resend_otp", emailSubject, foundUser.name, otp);
 
   await User.updateOne({ email }, { otp, otpExpiry });
 };
@@ -379,6 +321,10 @@ export const verifyEmailIntoDB = async (email: string, otp: string) => {
     config.jwt_refresh_expires_in as string
   );
 
+  const emailSubject ="Your Account Has Been Verified"
+    await sendEmail(foundUser.email, "complete_verification", emailSubject, foundUser.name);
+
+
   return {
     accessToken,
     refreshToken,
@@ -417,9 +363,11 @@ const user = await User.findOne({ _id: payload.userId }).select("+password");
     throw new AppError(httpStatus.NOT_FOUND, "This user is not found !");
   }
 
-  
+    const emailSubject = "Your Everycare Account Password Has Been Changed";
+
   user.password = payload.password;
   await user.save();
+  await sendEmail(user.email, "password_change", emailSubject, user.name);
 
   return { message: "Password updated successfully" };
 };
@@ -464,7 +412,7 @@ const requestOtp = async (email: string) => {
     otpExpiry,
     isUsed: false,
   });
-  const emailSubject = "Your Password Reset OTP";
+  const emailSubject = "Reset Your Account Password";
 
   await sendEmail(
     email,
