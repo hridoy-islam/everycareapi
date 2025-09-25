@@ -54,6 +54,14 @@ router.patch(
   AuthControllers.verifyEmail
 );
 
+router.post(
+  "/pre-register",
+  AuthControllers.preRegister
+);
+router.post(
+  "/pre-register/resend-otp",
+  AuthControllers.resendOtpPreRegister
+);
 router.patch(
   "/resend-otp",
   AuthControllers.emailVerifySendOtp

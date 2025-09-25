@@ -18,6 +18,7 @@ export const sendEmail = async (
       user: "admin@everycareromford.co.uk",
       pass: "St4rting0ver!!!",
     },
+
   });
 
   try {

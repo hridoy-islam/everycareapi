@@ -6,6 +6,34 @@ import { sendEmail } from "../../utils/sendEmail";
 import config from "../../config";
 
 
+
+
+const preRegister = catchAsync(async (req, res) => {
+  const email = req.body.email;
+  const otp = req.body.otp;
+  const firstName = req.body.firstName;
+  const result = await AuthServices.preRegister(firstName, email, otp);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Email verified succesfully!",
+    data: result,
+  });
+});
+const resendOtpPreRegister = catchAsync(async (req, res) => {
+  const email = req.body.email;
+  const otp = req.body.otp;
+  const firstName = req.body.firstName;
+  const result = await AuthServices.resendOtpPreRegister(firstName, email, otp);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "otp sent succesfully!",
+    data: result,
+  });
+});
+
+
 const login = catchAsync(async (req, res) => {
   const result = await AuthServices.checkLogin(req.body,req);
   const { accessToken,refreshToken } = result;
@@ -168,5 +196,7 @@ export const AuthControllers = {
   emailVerifySendOtp,
   refreshToken,
   ChangePassword,
-  PersonalInformation
+  PersonalInformation,
+  preRegister,
+  resendOtpPreRegister
 };

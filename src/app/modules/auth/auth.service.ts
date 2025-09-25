@@ -25,11 +25,57 @@ function generateOtpAndExpiry() {
   return { otp, otpExpiry };
 }
 
+
+
+const preRegister = async (firstName: string, email: string, otp: string) => {
+  const emailSubject = "Verify your Everycare Romford account";
+
+  try {
+    const existingUser = await User.isUserExists(email);
+    if (existingUser) {
+      throw new Error("An account with this email already exists.");
+    }
+
+    await sendEmail(
+      email,
+      "register_otp_template",
+      emailSubject,
+      firstName,
+      otp
+    );
+
+  } catch (error: any) {
+    console.error("Failed to send verification email:", error);
+    throw new Error(error.message || "Email sending failed");
+  }
+};
+
+
+const resendOtpPreRegister = async (firstName: string, email: string, otp: string) => {
+  const emailSubject = "Your Everycare verification code (resend)";
+
+  try {
+    await sendEmail(
+      email,
+      "register_resend_otp_template",
+      emailSubject,
+      firstName,
+      otp
+    );
+    console.log("Verification email sent successfully to:", email);
+  } catch (error) {
+    console.error("Failed to send verification email:", error);
+    throw new Error("Email sending failed");
+  }
+};
+
+
+
 const checkLogin = async (payload: TLogin, req: any) => {
   try {
     const foundUser = await User.isUserExists(payload.email);
     if (!foundUser) {
-      throw new AppError(httpStatus.NOT_FOUND, "Login Details are not correct");
+      throw new AppError(httpStatus.NOT_FOUND, "No Account found with this email.");
     }
 
     if (foundUser.isDeleted) {
@@ -42,7 +88,7 @@ const checkLogin = async (payload: TLogin, req: any) => {
     if (
       !(await User.isPasswordMatched(payload?.password, foundUser?.password))
     ) {
-      throw new AppError(httpStatus.FORBIDDEN, "Password does not match");
+      throw new AppError(httpStatus.FORBIDDEN, "Check Credentials.");
     }
 
     
@@ -102,6 +148,10 @@ const checkLogin = async (payload: TLogin, req: any) => {
     );
   }
 };
+
+
+
+
 const refreshToken = async (token: string) => {
   if (!token || typeof token !== "string") {
     throw new AppError(
@@ -249,7 +299,7 @@ const createUserIntoDB = async (payload: TCreateUser) => {
     await sendEmail(
       payload.email,
       "welcome_template",
-      "Welcome to Everycare",
+      "Welcome to Everycare Romford – Your account is active",
       payload.name
     );
   } catch (error) {
@@ -412,7 +462,7 @@ const requestOtp = async (email: string) => {
     otpExpiry,
     isUsed: false,
   });
-  const emailSubject = "Reset Your Account Password";
+  const emailSubject = "Reset your Everycare Romford password";
 
   await sendEmail(
     email,
@@ -509,6 +559,8 @@ export const AuthServices = {
   ChangePassword,
   validateOtp,
   requestOtp,
-  personalInformationIntoDB
+  personalInformationIntoDB,
+  preRegister,
+  resendOtpPreRegister
   
 };
