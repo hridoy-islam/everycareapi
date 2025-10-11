@@ -5,8 +5,9 @@ import { AuthRoutes } from "../modules/auth/auth.router";
 import { NotificationsRoutes } from "../modules/notification/notification.route";
 import { UploadDocumentRoutes } from "../modules/documents/documents.route";
 import { JobApplicationRoutes } from "../modules/jobApplications/jobApplication.route";
-import { JobRoutes } from "../modules/job/job.route";
 import { InterviewRoutes } from "../modules/interview/interview.route";
+import { JobRoutes } from "../modules/job/job.route";
+import { ReferenceRoutes } from "../modules/applicantReference/reference.route";
 
 const router = Router();
 
@@ -41,6 +42,10 @@ const moduleRoutes = [
   {
     path: "/interview",
     route: InterviewRoutes,
+  },
+  {
+    path: "/reference",
+    route: ReferenceRoutes,
   },
  
 ];

@@ -250,7 +250,7 @@ export interface TUser {
   // -----------------------
   // Application & Career
   // -----------------------
-    availableFromDate: Date;
+  availableFromDate: Date;
   source: string;
   referralEmployee?: string;
 
@@ -328,12 +328,12 @@ export interface TUser {
   // -----------------------
   // Training
   // -----------------------
-trainingData?: {
-  trainingName: string;
-  awardingBody: string;
-  completionDate: Date | null;
-  certificate?: string; 
-}[];
+  trainingData?: {
+    trainingName: string;
+    awardingBody: string;
+    completionDate: Date | null;
+    certificate?: string;
+  }[];
   // -----------------------
   // Ethnicity
   // -----------------------
@@ -344,10 +344,10 @@ trainingData?: {
   // -----------------------
   // Life Skills & Experience
   // -----------------------
-  hasDisability: boolean ,
-    disabilityDetails: string ,
-    needsReasonableAdjustment: boolean ,
-    reasonableAdjustmentDetails: string,
+  hasDisability: boolean,
+  disabilityDetails: string,
+  needsReasonableAdjustment: boolean,
+  reasonableAdjustmentDetails: string,
   // -----------------------
   // Life Skills & Experience
   // -----------------------
@@ -517,6 +517,12 @@ trainingData?: {
   // consentDataProtection?: boolean;
   consentVaccination?: boolean;
   consentTerminationClause?: boolean;
+
+
+  ref1Submit?: boolean;
+  ref2Submit?: boolean;
+  ref3Submit?: boolean;
+
 
   createdAt?: Date;
   updatedAt?: Date;

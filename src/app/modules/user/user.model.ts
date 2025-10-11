@@ -215,12 +215,12 @@ const userSchema = new Schema<TUser, UserModel>(
     // Training
     trainingData: {
       type: [
-         {
-      trainingName: { type: String },
-      awardingBody: { type: String },
-      completionDate: { type: Date },
-      certificate: { type: String }, 
-    },
+        {
+          trainingName: { type: String },
+          awardingBody: { type: String },
+          completionDate: { type: Date },
+          certificate: { type: String },
+        },
       ],
       default: [],
     },
@@ -234,7 +234,7 @@ const userSchema = new Schema<TUser, UserModel>(
     disabilityDetails: { type: String },
     needsReasonableAdjustment: { type: Boolean },
     reasonableAdjustmentDetails: { type: String },
-    // Life Skills & Experience
+    // LExperience
     lifeSkillsAndInterests: { type: String },
     relevantExperience: { type: String },
 
@@ -284,7 +284,7 @@ const userSchema = new Schema<TUser, UserModel>(
     workExperience: { type: [String], default: [] },
     personalStatement: { type: [String], default: [] },
 
-    // Health & Medical
+    //  post employment
     sex: { type: String },
     advisedMedicalWorkRestriction: { type: Boolean },
     advisedMedicalWorkRestrictionComment: { type: String },
@@ -410,22 +410,28 @@ const userSchema = new Schema<TUser, UserModel>(
     buildingSocietyRollNo: { type: String },
 
     // Consent & Declarations
-    declarationCorrectUpload: { type: Boolean },
     declarationContactReferee: { type: Boolean },
+
+    declarationCorrectUpload: { type: Boolean },
     authorizeReferees: { type: Boolean }, // 👈 New field
     disciplinaryInvestigation: { type: Boolean },
     disciplinaryInvestigationDetails: { type: String },
     abuseInvestigation: { type: Boolean },
     abuseInvestigationDetails: { type: String },
+    appliedBefore: { type: Boolean },
+
     roaDeclaration: { type: Boolean },
     roaDeclarationDetails: { type: String },
-    appliedBefore: { type: Boolean },
     termsAccepted: { type: Boolean },
     dataProcessingAccepted: { type: Boolean },
+
     consentMedicalDeclaration: { type: Boolean },
     // consentDataProtection: { type: Boolean },
     consentVaccination: { type: Boolean },
     consentTerminationClause: { type: Boolean },
+    ref1Submit: { type: Boolean, default: false },
+    ref2Submit: { type: Boolean, default: false },
+    ref3Submit: { type: Boolean, default: false },
 
     // Timestamps
     createdAt: { type: Date },

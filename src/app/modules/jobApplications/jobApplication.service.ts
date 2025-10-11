@@ -9,13 +9,14 @@ import mongoose from "mongoose";
 import { sendEmail } from "../../utils/sendEmail";
 import { sendEmailAdmin } from "../../utils/sendEmailAdmin";
 import moment from "moment";
+import { sendEmailToReference } from "../../utils/sendEmailToReference";
 
 const getAllJobApplicationFromDB = async (query: Record<string, unknown>) => {
   const { searchTerm, ...otherQueryParams } = query;
 
   const processedQuery: Record<string, any> = { ...otherQueryParams };
 
- 
+
 
   const ApplicationQuery = new QueryBuilder(
     JobApplication.find().populate("jobId").populate({
@@ -86,16 +87,19 @@ const createJobApplicationIntoDB = async (
   }
 
 
-  
+
   const result = await JobApplication.create(payload);
 
   const populatedResult = await JobApplication.findById(result._id)
     .populate("jobId", "jobTitle")
-    .populate("applicantId", "name email availableFromDate phone dateOfBirth countryOfResidence") as unknown as PopulatedJobApplication;
+    .populate("applicantId", "name email availableFromDate phone dateOfBirth countryOfResidence ref1Submit ref2Submit ref3Submit professionalReferee1 professionalReferee2 personalReferee isCompleted") as unknown as PopulatedJobApplication;
 
   if (!populatedResult) {
     throw new Error("Failed to populate job application");
   }
+
+  const applicant = populatedResult.applicantId;
+  const jobRole = populatedResult.jobId?.jobTitle || "";
 
   const title = populatedResult?.jobId?.jobTitle;
   const applicantName = populatedResult?.applicantId?.name;
@@ -105,20 +109,20 @@ const createJobApplicationIntoDB = async (
   const otp = "";
 
 
-    const phone = (populatedResult?.applicantId as any)?.phone;
-const countryOfResidence = (populatedResult?.applicantId as any)?.countryOfResidence;
-const formattedCountryOfResidence = countryOfResidence
-  ? countryOfResidence.charAt(0).toUpperCase() + countryOfResidence.slice(1)
-  : '';
- 
+  const phone = (populatedResult?.applicantId as any)?.phone;
+  const countryOfResidence = (populatedResult?.applicantId as any)?.countryOfResidence;
+  const formattedCountryOfResidence = countryOfResidence
+    ? countryOfResidence.charAt(0).toUpperCase() + countryOfResidence.slice(1)
+    : '';
+
   const dob = (populatedResult?.applicantId as any)?.dateOfBirth;
   const formattedDob = dob ? moment(dob).format("DD MMM, YYYY") : "N/A";
   const availableFromDate = (populatedResult?.applicantId as any)?.availableFromDate;
-  const formattedAvailableFromDate= availableFromDate ? moment(availableFromDate).format("DD MMM, YYYY") : "N/A";
+  const formattedAvailableFromDate = availableFromDate ? moment(availableFromDate).format("DD MMM, YYYY") : "N/A";
   const adminSubject = `New Application Received: ${title}`;
 
 
-  
+
   await sendEmail(
     applicantEmail,
     "job-application",
@@ -128,7 +132,7 @@ const formattedCountryOfResidence = countryOfResidence
     title
   );
 
-      await sendEmailAdmin(
+  await sendEmailAdmin(
     "admin@everycareromford.co.uk",
     "job-application-admin",
     adminSubject,
@@ -141,6 +145,84 @@ const formattedCountryOfResidence = countryOfResidence
     formattedDob,
     formattedAvailableFromDate
   );
+  interface Referee {
+    name?: string;
+    email?: string;
+    relationship?: string;
+  }
+
+  interface Applicant {
+    _id: string;
+    name: string;
+    isCompleted?: boolean;
+    ref1Submit?: boolean;
+    ref2Submit?: boolean;
+    ref3Submit?: boolean;
+    professionalReferee1?: Referee;
+    professionalReferee2?: Referee;
+    personalReferee?: Referee;
+  }
+
+  type ReferenceData = {
+    refFlag?: boolean;
+    refEmail?: string;
+    refName?: string;
+    refType: "ref1" | "ref2" | "ref3";
+    refRelation?: string;
+  };
+
+  // --- Trigger reference emails if user has completed their profile ---
+  if (applicant?.isCompleted === true) {
+    const referenceData: ReferenceData[] = [
+      {
+        refFlag: applicant?.ref1Submit,
+        refEmail: applicant?.professionalReferee1?.email.trim().toLowerCase(),
+        refName: applicant?.professionalReferee1?.name,
+        refType: "ref1",
+        refRelation: applicant?.professionalReferee1?.relationship,
+      },
+      {
+        refFlag: applicant?.ref2Submit,
+        refEmail: applicant?.professionalReferee2?.email.trim().toLowerCase(),
+        refName: applicant?.professionalReferee2?.name,
+        refType: "ref2",
+        refRelation: applicant.professionalReferee2?.relationship,
+      },
+      {
+        refFlag: applicant?.ref3Submit,
+        refEmail: applicant?.personalReferee?.email.trim().toLowerCase(),
+        refName: applicant?.personalReferee?.name,
+        refType: "ref3",
+        refRelation: applicant?.personalReferee?.relationship,
+      },
+    ];
+
+    for (const ref of referenceData) {
+      if (ref.refEmail && ref.refFlag !== true) {
+        try {
+          const basePath = ref.refType === "ref3" ? "personal" : "professional";
+
+          const formatForUrl = (str = "") => encodeURIComponent(str.trim().replace(/\s+/g, "-"));
+
+          const applicationLink = `https://everycare.netlify.app/${ref.refType}/${formatForUrl(applicantName)}/${applicant._id}/${basePath}/${formatForUrl(ref.refRelation || "")}/${formatForUrl(jobRole)}`;
+
+          await sendEmailToReference(
+            ref.refEmail,
+            "reference-letter",
+            `Reference Request for ${applicantName}`,
+            applicantName,
+            ref.refName || "",
+            applicationLink,
+            jobRole
+          );
+
+        } catch (error) {
+          console.error(`❌ Failed to send reference email to ${ref.refEmail}:`, error);
+        }
+      }
+    }
+  }
+
 
   return result;
 };

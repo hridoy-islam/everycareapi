@@ -13,7 +13,7 @@ router.get(
 );
 router.get(
   "/:id",
-  auth("admin",  "user", "student","applicant"),
+  // auth("admin",  "user", "student","applicant"),
   UserControllers.getSingleUser
 );
 
