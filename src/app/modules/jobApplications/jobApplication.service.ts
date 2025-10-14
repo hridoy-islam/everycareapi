@@ -10,6 +10,7 @@ import { sendEmail } from "../../utils/sendEmail";
 import { sendEmailAdmin } from "../../utils/sendEmailAdmin";
 import moment from "moment";
 import { sendEmailToReference } from "../../utils/sendEmailToReference";
+import crypto from "crypto";
 
 const getAllJobApplicationFromDB = async (query: Record<string, unknown>) => {
   const { searchTerm, ...otherQueryParams } = query;
@@ -166,6 +167,7 @@ const createJobApplicationIntoDB = async (
   type ReferenceData = {
     refFlag?: boolean;
     refEmail?: string;
+    refPosition?: string;
     refName?: string;
     refType: "ref1" | "ref2" | "ref3";
     refRelation?: string;
@@ -178,6 +180,7 @@ const createJobApplicationIntoDB = async (
         refFlag: applicant?.ref1Submit,
         refEmail: applicant?.professionalReferee1?.email.trim().toLowerCase(),
         refName: applicant?.professionalReferee1?.name,
+        refPosition: applicant?.professionalReferee1.position,
         refType: "ref1",
         refRelation: applicant?.professionalReferee1?.relationship,
       },
@@ -185,6 +188,8 @@ const createJobApplicationIntoDB = async (
         refFlag: applicant?.ref2Submit,
         refEmail: applicant?.professionalReferee2?.email.trim().toLowerCase(),
         refName: applicant?.professionalReferee2?.name,
+        refPosition: applicant?.professionalReferee2.position,
+
         refType: "ref2",
         refRelation: applicant.professionalReferee2?.relationship,
       },
@@ -194,6 +199,8 @@ const createJobApplicationIntoDB = async (
         refName: applicant?.personalReferee?.name,
         refType: "ref3",
         refRelation: applicant?.personalReferee?.relationship,
+        refPosition: applicant?.personalReferee.position,
+
       },
     ];
 
@@ -201,11 +208,21 @@ const createJobApplicationIntoDB = async (
       if (ref.refEmail && ref.refFlag !== true) {
         try {
           const basePath = ref.refType === "ref3" ? "personal" : "professional";
-
+          const randomToken = crypto.randomBytes(24).toString("hex");
           const formatForUrl = (str = "") => encodeURIComponent(str.trim().replace(/\s+/g, "-"));
 
-          const applicationLink = `https://everycare.netlify.app/${ref.refType}/${formatForUrl(applicantName)}/${applicant._id}/${basePath}/${formatForUrl(ref.refRelation || "")}/${formatForUrl(jobRole)}`;
-
+           const applicationLink = `https://everycare.netlify.app/${basePath}?${formatForUrl(
+              applicantName
+            )}&${formatForUrl(
+              applicantEmail
+            )}&${formatForUrl(ref.refName)}&${formatForUrl(
+              ref.refRelation
+            )}&${formatForUrl(ref.refPosition)}&${formatForUrl(
+              jobRole
+            )}&${formatForUrl(
+              ref.refType
+            )}&${randomToken}`;
+            
           await sendEmailToReference(
             ref.refEmail,
             "reference-letter",
