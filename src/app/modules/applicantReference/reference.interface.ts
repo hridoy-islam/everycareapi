@@ -18,7 +18,7 @@ export interface TReference {
   // === Step 2: Health vs Employment ===
   // Character Reference: Health & Personal Characteristics
   seriousIllness?: boolean;
-  drugDependency?: boolean;
+  drugsDependency?: boolean;
   knowAboutApplicant?: boolean;
   reliable?: boolean;
   punctual?: boolean;
@@ -36,8 +36,8 @@ export interface TReference {
 
   // === Step 3: Competency vs Performance ===
   // Character Reference
-  competencyLevel?: string;
-  commonSenseLevel?: string;
+  competency?: string;
+  commonSense?: string;
   relatesWell?: string;
 
   // Employment Reference: Performance Ratings (using actual keys as field names, all as string)

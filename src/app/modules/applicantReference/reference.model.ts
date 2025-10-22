@@ -2,15 +2,14 @@
 import { Schema, model, Model } from "mongoose";
 import { TReference } from "./reference.interface";
 
-
 const ReferenceSchema = new Schema<TReference>(
   {
-
     referenceType: {
       type: String,
       enum: ["ref1", "ref2", "ref3"],
       required: true,
-    }, applicantId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    },
+    applicantId: { type: Schema.Types.ObjectId, ref: "User", required: true },
 
     applicantName: { type: String, required: true },
     relationship: { type: String, required: true },
@@ -19,8 +18,8 @@ const ReferenceSchema = new Schema<TReference>(
     basedIn: { type: String },
 
     // Step 2
-    seriousIllness: { type: Boolean },
-    drugDependency: { type: Boolean },
+    seriousIllness: { type: String },
+    drugsDependency: { type: String },
     knowAboutApplicant: { type: Boolean },
     reliable: { type: Boolean },
     punctual: { type: Boolean },
@@ -36,8 +35,8 @@ const ReferenceSchema = new Schema<TReference>(
     reasonLeaving: { type: String },
 
     // Step 3
-    competencyLevel: { type: String },
-    commonSenseLevel: { type: String },
+    competency: { type: String },
+    commonSense: { type: String },
     relatesWell: { type: String },
 
     qualityOrganization: { type: String },
@@ -54,22 +53,23 @@ const ReferenceSchema = new Schema<TReference>(
     attendancePunctuality: { type: String },
 
     // Step 4
-    cautionsConvictions: { type: Boolean },
+    cautionsConvictions: { type: String },
     additionalComments: { type: String },
     unsuitableReason: { type: String },
     wouldReemploy: { type: String },
     noReemployReason: { type: String },
-    suitabilityOpinion: { type: String, },
+    suitabilityOpinion: { type: String },
 
-    refereeName: { type: String, },
-    refereePosition: { type: String, },
-    refereeDate: { type: Date, },
-
+    refereeName: { type: String },
+    refereePosition: { type: String },
+    refereeDate: { type: Date },
   },
   {
     timestamps: true,
   }
-
 );
 
-export const Reference: Model<TReference> = model<TReference>("Reference", ReferenceSchema);
+export const Reference: Model<TReference> = model<TReference>(
+  "Reference",
+  ReferenceSchema
+);
