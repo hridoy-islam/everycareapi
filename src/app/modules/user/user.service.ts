@@ -71,7 +71,7 @@ export const updateUserIntoDB = async (id: string, payload: Partial<TUser>) => {
     const jobApplication = await JobApplication.findOne({ applicantId: id }).populate("jobId", "jobTitle");
 
     if (jobApplication) {
-      const jobRole = jobApplication.jobId?.jobTitle || "";
+      const jobRole = (jobApplication.jobId as any)?.jobTitle || "";
       const applicantName = result?.name || "";
       const applicantEmail = result?.email || "";
 

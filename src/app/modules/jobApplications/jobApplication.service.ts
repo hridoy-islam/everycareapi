@@ -10,7 +10,9 @@ import { sendEmail } from "../../utils/sendEmail";
 import { sendEmailAdmin } from "../../utils/sendEmailAdmin";
 import moment from "moment";
 import { sendEmailToReference } from "../../utils/sendEmailToReference";
-import crypto from "crypto";
+import crypto from "crypto"
+import { User } from "../user/user.model";
+import axios from "axios";
 
 const getAllJobApplicationFromDB = async (query: Record<string, unknown>) => {
   const { searchTerm, ...otherQueryParams } = query;
@@ -49,17 +51,58 @@ const updateJobApplicationIntoDB = async (
   id: string,
   payload: Partial<TJobApplication>
 ) => {
+  // Step 1: Find existing application
   const application = await JobApplication.findById(id);
   if (!application) {
     throw new AppError(httpStatus.NOT_FOUND, "Application not found");
   }
 
-  const result = await JobApplication.findByIdAndUpdate(id, payload, {
-    new: true,
-    runValidators: true,
-  });
+  // Only update status to 'recruit' after successful API call
+  if (payload.status === "recruit") {
+    try {
+      const applicantId = application.applicantId;
 
-  return result;
+      // Include password if necessary (not recommended to send real password)
+      const userData = await User.findById(applicantId).select("+password").lean();
+      if (!userData) {
+        throw new AppError(httpStatus.NOT_FOUND, "Applicant data not found");
+      }
+
+      const apiUrl = process.env.VITE_PEOPLEPLANNER || "http://localhost:5000/api/hr/pending-hiring";
+      const token = process.env.VITE_TOKEN || "people-planner";
+
+      // Step 2: Send data to People Planner
+      await axios.post(apiUrl, { ...userData }, {
+        headers: { "x-company-token": `${token}` },
+      });
+
+      // console.log("✅ Applicant data successfully sent to People Planner");
+
+      // Step 3: Only now update the application in DB
+      const result = await JobApplication.findByIdAndUpdate(
+        id,
+        payload,
+        { new: true, runValidators: true }
+      );
+
+      return result;
+
+    } catch (error: any) {
+      console.error("❌ Failed to send applicant data:", error.message);
+      // Throw AppError and do not update status
+      throw new AppError(
+        httpStatus.INTERNAL_SERVER_ERROR,
+        "Failed to onboard the applicant to People Planner."
+      );
+    }
+  } else {
+    // If not recruiting, just update normally
+    const result = await JobApplication.findByIdAndUpdate(id, payload, {
+      new: true,
+      runValidators: true,
+    });
+    return result;
+  }
 };
 
 
