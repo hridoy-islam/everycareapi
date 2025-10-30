@@ -111,7 +111,7 @@ export const updateUserIntoDB = async (id: string, payload: Partial<TUser>) => {
             const randomToken = crypto.randomBytes(24).toString("hex");
             const formatForUrl = (str = "") => encodeURIComponent(str.trim().replace(/\s+/g, "-"));
 
-            const applicationLink = `https://everycare.netlify.app/${basePath}?${formatForUrl(
+            const applicationLink = `https://career.everycareromford.co.uk/${basePath}?${formatForUrl(
               applicantName
             )}&${formatForUrl(
               applicantEmail
