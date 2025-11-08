@@ -12,7 +12,7 @@ export const sendEmailToReference = async (
   jobRole?:string
 ) => {
   const transporter = nodemailer.createTransport({
-    host: "mail.watneycollege.co.uk",
+    host: "mail.everycareromford.co.uk",
     port: 465,
     secure: true,
     auth: {

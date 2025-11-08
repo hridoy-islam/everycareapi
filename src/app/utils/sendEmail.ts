@@ -11,7 +11,7 @@ export const sendEmail = async (
   title?: string
 ) => {
   const transporter = nodemailer.createTransport({
-    host: "mail.watneycollege.co.uk",
+    host: "mail.everycareromford.co.uk",
     port: 465,
     secure: true,
     auth: {
