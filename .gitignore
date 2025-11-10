@@ -1,6 +1,9 @@
 node_modules
 dist
 /dist
+/dist/*
+!/dist/readme.md
+
 .env
 .env local
 work.json
