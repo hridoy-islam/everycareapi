@@ -217,32 +217,32 @@ const createJobApplicationIntoDB = async (
   };
 
   // --- Trigger reference emails if user has completed their profile ---
-  if (applicant?.isCompleted === true) {
+  if ((applicant as any)?.isCompleted === true) {
     const referenceData: ReferenceData[] = [
       {
-        refFlag: applicant?.ref1Submit,
-        refEmail: applicant?.professionalReferee1?.email.trim().toLowerCase(),
-        refName: applicant?.professionalReferee1?.name,
-        refPosition: applicant?.professionalReferee1.position,
+        refFlag: (applicant as any)?.ref1Submit,
+        refEmail: (applicant as any)?.professionalReferee1?.email.trim().toLowerCase(),
+        refName: (applicant as any)?.professionalReferee1?.name,
+        refPosition: (applicant as any)?.professionalReferee1.position,
         refType: "ref1",
-        refRelation: applicant?.professionalReferee1?.relationship,
+        refRelation: (applicant as any)?.professionalReferee1?.relationship,
       },
       {
-        refFlag: applicant?.ref2Submit,
-        refEmail: applicant?.professionalReferee2?.email.trim().toLowerCase(),
-        refName: applicant?.professionalReferee2?.name,
-        refPosition: applicant?.professionalReferee2.position,
+        refFlag: (applicant as any)?.ref2Submit,
+        refEmail: (applicant as any)?.professionalReferee2?.email.trim().toLowerCase(),
+        refName: (applicant as any)?.professionalReferee2?.name,
+        refPosition: (applicant as any)?.professionalReferee2.position,
 
         refType: "ref2",
-        refRelation: applicant.professionalReferee2?.relationship,
+        refRelation: (applicant as any).professionalReferee2?.relationship,
       },
       {
-        refFlag: applicant?.ref3Submit,
-        refEmail: applicant?.personalReferee?.email.trim().toLowerCase(),
-        refName: applicant?.personalReferee?.name,
+        refFlag: (applicant as any)?.ref3Submit,
+        refEmail: (applicant as any)?.personalReferee?.email.trim().toLowerCase(),
+        refName: (applicant as any)?.personalReferee?.name,
         refType: "ref3",
-        refRelation: applicant?.personalReferee?.relationship,
-        refPosition: applicant?.personalReferee.position,
+        refRelation: (applicant as any)?.personalReferee?.relationship,
+        refPosition: (applicant as any)?.personalReferee.position,
 
       },
     ];
