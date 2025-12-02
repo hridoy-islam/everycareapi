@@ -116,7 +116,7 @@ const userSchema = new Schema<TUser, UserModel>(
     dateOfBirth: { type: Date },
     nationality: { type: String },
     countryOfResidence: { type: String },
-    countryOfBirth: { type: String },
+    // countryOfBirth: { type: String },
     shareCode: { type: String },
     nationalInsuranceNumber: { type: String },
 
@@ -425,14 +425,19 @@ const userSchema = new Schema<TUser, UserModel>(
     termsAccepted: { type: Boolean },
     dataProcessingAccepted: { type: Boolean },
 
-    consentMedicalDeclaration: { type: Boolean },
     // consentDataProtection: { type: Boolean },
+    consentMedicalDeclaration: { type: Boolean },
     consentVaccination: { type: Boolean },
     consentTerminationClause: { type: Boolean },
     ref1Submit: { type: Boolean, default: false },
     ref2Submit: { type: Boolean, default: false },
     ref3Submit: { type: Boolean, default: false },
 
+    dbsDone:{ type: Boolean, default: false },
+    medicalDone:{ type: Boolean, default: false },
+    ecertDone:{ type: Boolean, default: false },
+    bankDetailsDone:{ type: Boolean, default: false },
+    checkListDone:{ type: Boolean, default: false },
     // Timestamps
     createdAt: { type: Date },
     updatedAt: { type: Date },

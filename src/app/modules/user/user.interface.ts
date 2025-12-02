@@ -159,7 +159,6 @@ export interface emergencyContactData {
   emergencyRelationship: string;
 }
 
-
 export interface EnglishQualification {
   englishTestType?: string;
   englishTestScore?: string;
@@ -177,8 +176,6 @@ export interface Referee {
   fax?: string;
   email: string;
 }
-
-
 
 export interface TUser {
   _id: Types.ObjectId;
@@ -285,7 +282,6 @@ export interface TUser {
   professionalBody: boolean;
   professionalBodyDetails?: string;
 
-
   // -----------------------
   // Employment
   // -----------------------
@@ -344,10 +340,10 @@ export interface TUser {
   // -----------------------
   // Life Skills & Experience
   // -----------------------
-  hasDisability: boolean,
-  disabilityDetails: string,
-  needsReasonableAdjustment: boolean,
-  reasonableAdjustmentDetails: string,
+  hasDisability: boolean;
+  disabilityDetails: string;
+  needsReasonableAdjustment: boolean;
+  reasonableAdjustmentDetails: string;
   // -----------------------
   // Life Skills & Experience
   // -----------------------
@@ -518,11 +514,15 @@ export interface TUser {
   consentVaccination?: boolean;
   consentTerminationClause?: boolean;
 
-
   ref1Submit?: boolean;
   ref2Submit?: boolean;
   ref3Submit?: boolean;
 
+  dbsDone: boolean;
+  medicalDone: boolean;
+  ecertDone: boolean;
+  bankDetailsDone: boolean;
+  checkListDone: boolean;
 
   createdAt?: Date;
   updatedAt?: Date;

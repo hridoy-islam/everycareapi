@@ -24,7 +24,7 @@ const getAllJobApplicationFromDB = async (query: Record<string, unknown>) => {
   const ApplicationQuery = new QueryBuilder(
     JobApplication.find().populate("jobId").populate({
       path: "applicantId",
-      select: "title firstName initial lastName email phone",
+      select: "title firstName initial lastName email phone dbsDone medicalDone ecertDone bankDetailsDone checkListDone",
     }),
     processedQuery
   )

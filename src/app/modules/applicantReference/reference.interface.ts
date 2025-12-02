@@ -10,6 +10,7 @@ export interface TReference {
   relationship: string;
   howLongKnown: string;
   positionApplied?: string;
+  reasonForLeaving?: string;
 
   // From Character Reference
   basedIn?: string;

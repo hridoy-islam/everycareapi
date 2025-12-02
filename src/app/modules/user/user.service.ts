@@ -7,6 +7,7 @@ import AppError from "../../errors/AppError";
 import { sendEmailToReference } from "../../utils/sendEmailToReference";
 import { JobApplication } from "../jobApplications/jobApplication.model";
 import crypto from "crypto";
+import { sendModuleEmail } from "../../utils/sendModulesEmail";
 
 
 const getAllUserFromDB = async (query: Record<string, unknown>) => {
@@ -37,21 +38,60 @@ const getSingleUserFromDB = async (id: string, selectFields: string = '') => {
   return result;
 };
 
-// const updateUserIntoDB = async (id: string, payload: Partial<TUser>) => {
+const scheduleRecurringEmails = (email: string, name: string) => {
+  const intervalMinutes = 5;
 
-//   const user = await User.findById(id);
-//   if (!user) {
-//     throw new AppError(httpStatus.NOT_FOUND, "User not found");
-//   }
+  const emailSequence = [
+    {
+      id: 1,
+       to:email,
+      subject: "Welcome! Your Profile is Complete",
+      template: "welcome_template",
+    },
+    {
+      id: 2,
+       to:email,
+      subject: "Here are some tips for your application",
+      template: "tips_template",
+    },
+    {
+      id: 3,
+      to:email,
+      subject: "Meet our team",
+      template: "team_intro_template",
+    },
+    {
+      id: 4,
+       to:email,
+      subject: "Important Documentation Requirements",
+      template: "docs_template",
+    },
+    {
+      id: 5,
+       to:email,
+      subject: "Final Reminder regarding your application",
+      template: "final_check_template",
+    },
+  ];
 
-//   const result = await User.findByIdAndUpdate(id, payload, {
-//     new: true,
-//     runValidators: true,
-//   });
+  emailSequence.forEach((mailConfig, index) => {
+    const delayTime = (index + 1) * intervalMinutes * 60 * 1000; 
 
-//   return result;
-// };
-
+    setTimeout(async () => {
+      try {
+        await sendModuleEmail(
+          email,
+          mailConfig.template,
+          mailConfig.subject,
+          name,
+        );
+        console.log(`✅ Sequence Email #${mailConfig.id} sent to ${email}`);
+      } catch (error) {
+        console.error(`❌ Failed to send sequence email #${mailConfig.id}`, error);
+      }
+    }, delayTime);
+  });
+};
 
 export const updateUserIntoDB = async (id: string, payload: Partial<TUser>) => {
   const user = await User.findById(id);
@@ -139,6 +179,11 @@ export const updateUserIntoDB = async (id: string, payload: Partial<TUser>) => {
           }
         }
       }
+
+
+      if (applicantEmail) {
+      scheduleRecurringEmails(applicantEmail, applicantName);
+    }
     }
   }
 

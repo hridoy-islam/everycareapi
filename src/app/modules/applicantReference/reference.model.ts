@@ -16,6 +16,7 @@ const ReferenceSchema = new Schema<TReference>(
     howLongKnown: { type: String, required: true },
     positionApplied: { type: String },
     basedIn: { type: String },
+    reasonForLeaving: { type: String },
 
     // Step 2
     seriousIllness: { type: String },
