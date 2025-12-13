@@ -23,12 +23,6 @@ router.get(
 );
 
 router.patch(
-  "/",
-  // auth("admin"),
-  LogsControllers.updateLogs
-);
-
-router.patch(
   "/:id",
   // auth("admin"),
   LogsControllers.updateLogsById

@@ -46,10 +46,24 @@ const createEcertForm: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
+
+const deleteSingleEcertForm = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await EcertFormServices.deleteEcertFormIntoDB(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "EcertForm is delete succesfully",
+    data: result,
+  });
+});
+
+
 export const EcertFormControllers = {
   getAllEcertForm,
   getSingleEcertForm,
   updateEcertForm,
-  createEcertForm
+  createEcertForm,
+  deleteSingleEcertForm
   
 };

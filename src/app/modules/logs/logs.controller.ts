@@ -36,15 +36,6 @@ const getSingleLogs = catchAsync(async (req, res) => {
   });
 });
 
-const updateLogs = catchAsync(async (req, res) => {
-  const result = await LogsServices.updateLogsIntoDB( req.body);
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Logs is updated succesfully",
-    data: result,
-  });
-});
 
 
 
@@ -64,7 +55,7 @@ const updateLogsById = catchAsync(async (req, res) => {
 export const LogsControllers = {
   getAllLogs,
   getSingleLogs,
-  updateLogs,
+
   LogsCreate,
   updateLogsById
 };

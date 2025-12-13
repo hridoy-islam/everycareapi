@@ -73,55 +73,6 @@ const getSingleLogsFromDB = async (id: string) => {
   return result;
 };
 
-export const updateLogsIntoDB = async (
-  payload: Partial<TLogs> & { break?: Date }
-) => {
-  const { userId, action, clockOut, break: breakTime } = payload;
-
-  if (!userId || !action) {
-    return null;
-  }
-
-  // Find the latest log for this user (the most recent session)
-  const latestLog = await Logs.findOne({ userId }).sort({ createdAt: -1 });
-
-  if (!latestLog) {
-    return null;
-  }
-
-  // 🕒 Handle "clockOut"
-  if (action === "clockOut") {
-    latestLog.action = "clockOut";
-    latestLog.clockOut = (clockOut || new Date()) as any;
-    await latestLog.save();
-    return latestLog;
-  }
-
-  // ☕ Handle "break"
-  if (action === "break") {
-    if (!latestLog.breaks) {
-      latestLog.breaks = [];
-    }
-
-    const lastBreak = latestLog.breaks[latestLog.breaks.length - 1];
-
-    // If last break ended OR no break exists → start new break
-    if (!lastBreak || (lastBreak.breakStart && lastBreak.breakEnd)) {
-      latestLog.breaks.push({ breakStart: breakTime || new Date() });
-      // latestLog.description = "Break started";
-    } else {
-      // Otherwise → end current break
-      lastBreak.breakEnd = breakTime || new Date();
-      // latestLog.description = "Break ended";
-    }
-
-    await latestLog.save();
-    return latestLog;
-  }
-
-  // Default: return null for unsupported actions
-  return null;
-};
 
 const updateLogsByIdIntoDB = async (id: string, payload: Partial<TLogs>) => {
   const logs = await Logs.findById(id);
@@ -145,7 +96,7 @@ const createLogsIntoDB = async (payload: Partial<TLogs>) => {
 export const LogsServices = {
   getAllLogsFromDB,
   getSingleLogsFromDB,
-  updateLogsIntoDB,
+
   createLogsIntoDB,
   updateLogsByIdIntoDB,
 };

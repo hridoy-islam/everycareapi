@@ -51,12 +51,26 @@ const createEcertFormIntoDB = async (payload: Partial<TEcertForm>) => {
 };
 
 
+const deleteEcertFormIntoDB = async (id: string) => {
+  const ecertForm = await EcertForm.findById(id);
+  if (!ecertForm) {
+    throw new AppError(httpStatus.NOT_FOUND, "EcertForm not found");
+  }
+
+  const result = await EcertForm.findByIdAndDelete(id);
+
+  return result;
+};
+
+
+
 
 
 export const EcertFormServices = {
   getAllEcertFormFromDB,
   getSingleEcertFormFromDB,
   updateEcertFormIntoDB,
-  createEcertFormIntoDB
+  createEcertFormIntoDB,
+  deleteEcertFormIntoDB
   
 };

@@ -22,6 +22,10 @@ router.patch(
   "/:id",
   EcertFormControllers.updateEcertForm
 );
+router.delete(
+  "/:id",
+  EcertFormControllers.deleteSingleEcertForm
+);
 
 
 export const EcertFormRoutes = router;
