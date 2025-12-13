@@ -2,6 +2,7 @@ import { Types } from "mongoose";
 
 export interface TEmail{
   emailDraft: Types.ObjectId,
+  applicationId: Types.ObjectId,
   userId: Types.ObjectId;
   issuedBy:Types.ObjectId;
   to: string;

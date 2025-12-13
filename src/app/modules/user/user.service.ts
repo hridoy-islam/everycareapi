@@ -8,7 +8,7 @@ import { sendEmailToReference } from "../../utils/sendEmailToReference";
 import { JobApplication } from "../jobApplications/jobApplication.model";
 import crypto from "crypto";
 import { sendModuleEmail } from "../../utils/sendModulesEmail";
-
+import Logs from "../logs/logs.model";
 
 const getAllUserFromDB = async (query: Record<string, unknown>) => {
   const userQuery = new QueryBuilder(User.find(), query)
@@ -27,9 +27,9 @@ const getAllUserFromDB = async (query: Record<string, unknown>) => {
   };
 };
 
-const getSingleUserFromDB = async (id: string, selectFields: string = '') => {
+const getSingleUserFromDB = async (id: string, selectFields: string = "") => {
   let query = User.findById(id);
-  
+
   if (selectFields) {
     query = query.select(selectFields);
   }
@@ -44,38 +44,38 @@ const scheduleRecurringEmails = (email: string, name: string) => {
   const emailSequence = [
     {
       id: 1,
-       to:email,
+      to: email,
       subject: "Welcome! Your Profile is Complete",
       template: "welcome_template",
     },
     {
       id: 2,
-       to:email,
+      to: email,
       subject: "Here are some tips for your application",
       template: "tips_template",
     },
     {
       id: 3,
-      to:email,
+      to: email,
       subject: "Meet our team",
       template: "team_intro_template",
     },
     {
       id: 4,
-       to:email,
+      to: email,
       subject: "Important Documentation Requirements",
       template: "docs_template",
     },
     {
       id: 5,
-       to:email,
+      to: email,
       subject: "Final Reminder regarding your application",
       template: "final_check_template",
     },
   ];
 
   emailSequence.forEach((mailConfig, index) => {
-    const delayTime = (index + 1) * intervalMinutes * 60 * 1000; 
+    const delayTime = (index + 1) * intervalMinutes * 60 * 1000;
 
     setTimeout(async () => {
       try {
@@ -83,11 +83,14 @@ const scheduleRecurringEmails = (email: string, name: string) => {
           email,
           mailConfig.template,
           mailConfig.subject,
-          name,
+          name
         );
         console.log(`✅ Sequence Email #${mailConfig.id} sent to ${email}`);
       } catch (error) {
-        console.error(`❌ Failed to send sequence email #${mailConfig.id}`, error);
+        console.error(
+          `❌ Failed to send sequence email #${mailConfig.id}`,
+          error
+        );
       }
     }, delayTime);
   });
@@ -105,10 +108,47 @@ export const updateUserIntoDB = async (id: string, payload: Partial<TUser>) => {
     runValidators: true,
   });
 
+
+  const completionFieldsMap: Record<string, string> = {
+    dbsDone: "DBS Check completed.",
+    medicalDone: "Medical Questionnaire completed.",
+    ecertDone: "E-Certificates uploaded.",
+    bankDetailsDone: "Bank Details submitted.",
+    checkListDone: "Starter Checklist completed.",
+  };
+
+  for (const [field, logMessage] of Object.entries(completionFieldsMap)) {
+    if ((payload as any)[field] === true) {
+      try {
+        await Logs.create({
+          userId: id,
+          action: logMessage,
+        });
+      } catch (logError) {
+        console.error(`❌ Failed to create log for ${field}:`, logError);
+      }
+    }
+  }
+
+  if (payload.isCompleted) {
+    try {
+      await Logs.create({
+        userId: id,
+        action: `Applicant form completed.`,
+      });
+    } catch (logError) {
+      console.error(
+        `❌ Failed to create log for profile completion:`,
+        logError
+      );
+    }
+  }
+
   // ✅ Trigger reference emails when profile completed
-  if (payload.isCompleted === true) {
-    // Find job application for this user
-    const jobApplication = await JobApplication.findOne({ applicantId: id }).populate("jobId", "jobTitle");
+  if (payload.referenceMailSent) {
+    const jobApplication = await JobApplication.findOne({
+      applicantId: id,
+    }).populate("jobId", "jobTitle");
 
     if (jobApplication) {
       const jobRole = (jobApplication.jobId as any)?.jobTitle || "";
@@ -147,19 +187,19 @@ export const updateUserIntoDB = async (id: string, payload: Partial<TUser>) => {
       for (const ref of referenceData) {
         if (ref?.refEmail && ref?.refFlag === false) {
           try {
-            const basePath = ref.refType === "ref3" ? "personal" : "professional";
+            const basePath =
+              ref.refType === "ref3" ? "personal" : "professional";
             const randomToken = crypto.randomBytes(24).toString("hex");
-            const formatForUrl = (str = "") => encodeURIComponent(str.trim().replace(/\s+/g, "-"));
+            const formatForUrl = (str = "") =>
+              encodeURIComponent(str.trim().replace(/\s+/g, "-"));
 
             const applicationLink = `https://career.everycareromford.co.uk/${basePath}?${formatForUrl(
               applicantName
-            )}&${formatForUrl(
-              applicantEmail
-            )}&${formatForUrl(ref.refName)}&${formatForUrl(
-              ref.refRelation
-            )}&${formatForUrl(ref.refPosition)}&${formatForUrl(
-              jobRole
-            )}&${formatForUrl(
+            )}&${formatForUrl(applicantEmail)}&${formatForUrl(
+              ref.refName
+            )}&${formatForUrl(ref.refRelation)}&${formatForUrl(
+              ref.refPosition
+            )}&${formatForUrl(jobRole)}&${formatForUrl(
               ref.refType
             )}&${randomToken}`;
 
@@ -174,16 +214,30 @@ export const updateUserIntoDB = async (id: string, payload: Partial<TUser>) => {
             );
 
             // console.log(`✅ Reference email sent to ${ref.refEmail}`);
+
+            try {
+              await Logs.create({
+                userId: id,
+                action: `Reference Request Sent: ${ref.refType} to ${ref.refName} (${ref.refEmail}).`,
+              });
+            } catch (logError) {
+              console.error(
+                `❌ Failed to create log for reference email sent:`,
+                logError
+              );
+            }
           } catch (error) {
-            console.error(`❌ Failed to send reference email to ${ref.refEmail}:`, error);
+            console.error(
+              `❌ Failed to send reference email to ${ref.refEmail}:`,
+              error
+            );
           }
         }
       }
 
-
       if (applicantEmail) {
-      scheduleRecurringEmails(applicantEmail, applicantName);
-    }
+        scheduleRecurringEmails(applicantEmail, applicantName);
+      }
     }
   }
 
@@ -194,5 +248,4 @@ export const UserServices = {
   getAllUserFromDB,
   getSingleUserFromDB,
   updateUserIntoDB,
-
 };

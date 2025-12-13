@@ -524,6 +524,16 @@ export interface TUser {
   bankDetailsDone: boolean;
   checkListDone: boolean;
 
+
+  jobOfferMailSent: boolean;
+  interviewMailSent: boolean;
+  referenceMailSent: boolean;
+  postEmploymentUnlock: boolean;
+  dbsUnlock: boolean;
+  ecertUnlock: boolean;
+  bankDetailsUnlock: boolean;
+  startDateUnlock: boolean;
+
   createdAt?: Date;
   updatedAt?: Date;
 }

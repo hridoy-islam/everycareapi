@@ -13,6 +13,7 @@ import moment from "moment";
 import Signature from "../signature/signature.model";
 import { JobApplication } from "../jobApplications/jobApplication.model";
 import { sendEmailManual } from "../../utils/sendEmailManual";
+import Logs from "../logs/logs.model";
 
 
 
@@ -24,7 +25,10 @@ const createEmailIntoDB = async (payload: any) => {
       issuedBy,
       subject: emailSubject,
       body: emailBody,
-      applicationId
+      applicationId,
+      jobOfferMailSent,
+      interviewMailSent,
+      referenceMailSent
     } = payload;
 
     // Find user
@@ -34,7 +38,6 @@ const createEmailIntoDB = async (payload: any) => {
     }
 
     // Fetch course name if applicationId is provided
-  
     let applicationStatus = "";
     let applicationDate = "";
     let applicationTitle = "";
@@ -91,8 +94,8 @@ const createEmailIntoDB = async (payload: any) => {
         .replace(
           /\[emergencyRelationship\]/g,
           foundUser.emergencyRelationship || ""
-        )
-        
+        );
+
 
       // 2. Handle [signature id="1"] tags → Replace with <img> tag
       const signatureRegex = /\[signature\s+id=["'](\d+)["']\]/g;
@@ -120,8 +123,6 @@ const createEmailIntoDB = async (payload: any) => {
         }
       });
 
-     
-
       // 4. Wait for all async replacements and apply them
       const allPromises = [...signaturePromises];
 
@@ -130,7 +131,7 @@ const createEmailIntoDB = async (payload: any) => {
 
         // Apply all replacements to the text
         replacements.forEach(({ placeholder, replacement }) => {
-          replacedText = replacedText.replace(new RegExp(escapeRegExp(placeholder), 'g'), replacement ??'');
+          replacedText = replacedText.replace(new RegExp(escapeRegExp(placeholder), 'g'), replacement ?? '');
         });
       }
 
@@ -169,6 +170,57 @@ const createEmailIntoDB = async (payload: any) => {
       { new: true, runValidators: true }
     );
 
+
+    let logAction = "";
+ 
+    
+    // Determine the log action and type based on flags
+    if (jobOfferMailSent === true) {
+      logAction = `Job Offer Mail Sent to ${foundUser.name} for the role: ${applicationTitle}.`;
+     
+    } else if (interviewMailSent === true) {
+      logAction = `Interview Invitation Mail Sent to ${foundUser.name} for the role: ${applicationTitle}.`;
+      
+    }else {
+      logAction = `Email sent to ${foundUser.name}. Subject: "${processedSubject}"`;
+ 
+    }
+
+    try {
+      await Logs.create({
+        userId: userId,
+        action: `${logAction}`,
+      });
+      // console.log(`✅ Logged email action: ${logAction}`);
+    } catch (logError) {
+      console.error(`❌ Failed to create log for email sending:`, logError);
+    }
+
+    // ==========================================================
+    // ✅ NEW LOGIC: Update User flags based on Payload
+    // ==========================================================
+    
+    // Check if we need to update the User document
+    const userUpdates: Record<string, boolean> = {};
+
+    if (jobOfferMailSent === true) {
+      userUpdates.jobOfferMailSent = true;
+    }
+
+    if (interviewMailSent === true) {
+      userUpdates.interviewMailSent = true;
+    }
+
+    // Only make the DB call if there is something to update
+    if (Object.keys(userUpdates).length > 0) {
+      await User.findByIdAndUpdate(
+        userId, 
+        userUpdates,
+        { new: true }
+      );
+    }
+    // ==========================================================
+
     return updatedEmail;
   } catch (error: any) {
     console.error("Error in createEmailIntoDB:", error);
@@ -183,6 +235,8 @@ const createEmailIntoDB = async (payload: any) => {
     );
   }
 };
+
+
 const getAllEmailFromDB = async (query: Record<string, unknown>) => {
   const EmailQuery = new QueryBuilder(
     Email.find().populate("issuedBy", "name email"),

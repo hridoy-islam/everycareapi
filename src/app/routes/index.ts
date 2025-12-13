@@ -17,6 +17,7 @@ import { DbsFormRoutes } from "../modules/DbsFrom/dbsForm.route";
 import { BankDetailsRoutes } from "../modules/bankDetailsForm/bankDetailsFrom.route";
 import { MedicalQuestionRoutes } from "../modules/postMedicalQuestion/medicalQuestion.route";
 import { StarterChecklistRoutes } from "../modules/starterCheckListForm/starterCheckList.route";
+import { LogsRoutes } from "../modules/logs/logs.route";
 
 const router = Router();
 
@@ -76,20 +77,25 @@ const moduleRoutes = [
     path: "/ecert-form",
     route: EcertFormRoutes,
   },
-   {
+  {
     path: "/dbs-form",
     route: DbsFormRoutes,
   },
-   {
+  {
     path: "/bank-details",
     route: BankDetailsRoutes,
   },
-   {
+  {
     path: "/medical-form",
     route: MedicalQuestionRoutes,
-  }, {
+  },
+  {
     path: "/starter-checklist-form",
     route: StarterChecklistRoutes,
+  },
+  {
+    path: "/logs",
+    route: LogsRoutes,
   },
 ];
 

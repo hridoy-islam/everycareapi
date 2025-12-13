@@ -6,9 +6,9 @@ const emailSchema = new Schema(
     emailDraft: { type: Types.ObjectId, ref: "EmailDraft" }, 
     userId: { type: Types.ObjectId, required: true, ref: "User" }, 
     issuedBy: { type: Types.ObjectId, required: true, ref: "User" }, 
-    
-    subject: { type: String, required: true },
-    body: { type: String, required: true },
+    applicationId: { type: Types.ObjectId, ref: "JobApplication" },
+    subject: { type: String,},
+    body: { type: String,  },
     status: { type: String, enum: ["pending", "sent"], default: "pending" }, 
   },
   {
