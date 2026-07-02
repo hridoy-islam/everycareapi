@@ -26,7 +26,9 @@ const StarterChecklistSchema = new Schema<TStarterChecklist>(
     plan4: { type: Boolean, default: false },
     postgraduateLoan: { type: Boolean, default: false },
 
-    declarationSigned: { type: Boolean, required: true }
+    declarationSigned: { type: Boolean, required: true },
+        signatureUrl: { type: String},
+
   },
   { timestamps: true }
 );

@@ -275,14 +275,19 @@ const userSchema = new Schema<TUser, UserModel>(
     proofOfAddress1: { type: String },
     proofOfAddress2: { type: String },
     idDocuments: { type: [String], default: [] },
-    utilityBills: { type: [String], default: [] },
-    bankStatement: { type: [String], default: [] },
+    utilityBills: { type: String, default: [] },
+    bankStatement: { type: String, default: [] },
     proofOfNI: { type: [String], default: [] },
     immigrationDocument: { type: [String], default: [] },
     proofOfAddress: { type: [String], default: [] },
     passport: { type: [String], default: [] },
     workExperience: { type: [String], default: [] },
     personalStatement: { type: [String], default: [] },
+proofOfAddress1Type: { type: String, enum: ['bankStatement', 'utilityBill', 'drivingLicense'] },
+proofOfAddress2Type: { type: String, enum: ['bankStatement', 'utilityBill', 'drivingLicense'] },
+    rtwDocument:{type:String},
+    shareCodeDocument:{type:String},
+    signatureUrl:{type:String},
 
     //  post employment
     sex: { type: String },
@@ -441,11 +446,13 @@ const userSchema = new Schema<TUser, UserModel>(
     jobOfferMailSent:{ type: Boolean, default: false },
     interviewMailSent:{ type: Boolean, default: false },
     referenceMailSent:{ type: Boolean, default: false },
+    
     postEmploymentUnlock:{ type: Boolean, default: false },
     dbsUnlock:{ type: Boolean, default: false },
     ecertUnlock:{ type: Boolean, default: false },
     bankDetailsUnlock:{ type: Boolean, default: false },
     startDateUnlock:{ type: Boolean, default: false },
+
     // Timestamps
     createdAt: { type: Date },
     updatedAt: { type: Date },

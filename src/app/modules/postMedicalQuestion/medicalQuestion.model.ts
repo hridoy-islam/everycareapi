@@ -192,6 +192,7 @@ const medicalQuestionSchema = new Schema<TMedicalQuestion>(
     declDataProcessing: { type: Boolean, default: false },
     declVaccination: { type: Boolean, default: false },
     declTermination: { type: Boolean, default: false },
+    signatureUrl: { type: String},
   },
   { timestamps: true }
 );

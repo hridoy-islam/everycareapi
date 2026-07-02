@@ -12,6 +12,8 @@ export interface TInterview {
   candidateId: Types.ObjectId;      
   jobId: Types.ObjectId;               
   interviewDate: Date;       
+  interviewTime: string;
+  interviewerSignature: string;
   interviewerName: string;
   assessments: Record<string, AssessmentEntry>; 
   decision: 'reject' | 'appointed' | 'second-choice';

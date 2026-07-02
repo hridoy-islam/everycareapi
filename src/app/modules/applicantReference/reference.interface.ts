@@ -70,4 +70,5 @@ export interface TReference {
   refereeName: string;
   refereePosition: string;
   refereeDate: Date;
+  signatureUrl?: string;
 }

@@ -8,7 +8,9 @@ const InterviewSchema = new Schema<TInterview>(
     candidateId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     jobId: { type: Schema.Types.ObjectId, ref: "JobApplication", required: true },
     interviewDate: { type: Date, required: true },
+    interviewTime: { type: String, required: true },
     interviewerName: { type: String, required: true },
+    interviewerSignature: { type: String, required: true },
 
     assessments: {
       type: Map,

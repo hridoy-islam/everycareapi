@@ -372,6 +372,11 @@ export interface TUser {
   passport?: string[];
   workExperience?: string[];
   personalStatement?: string[];
+  rtwDocument?: string;
+  shareCodeDocument?: string;
+  proofOfAddress2Type?: string;
+  proofOfAddress1Type?: string;
+  signatureUrl?: string;
 
   // -----------------------
   // Health & Medical

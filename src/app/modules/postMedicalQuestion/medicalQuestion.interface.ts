@@ -141,4 +141,5 @@ export interface TMedicalQuestion {
   declDataProcessing: boolean;
   declVaccination: boolean;
   declTermination: boolean;
+  signatureUrl?: string;
 }

@@ -64,6 +64,7 @@ const ReferenceSchema = new Schema<TReference>(
     refereeName: { type: String },
     refereePosition: { type: String },
     refereeDate: { type: Date },
+    signatureUrl: { type: String },
   },
   {
     timestamps: true,

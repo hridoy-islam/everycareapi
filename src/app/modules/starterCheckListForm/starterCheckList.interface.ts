@@ -23,4 +23,5 @@ export interface TStarterChecklist {
   plan4?: boolean;
   postgraduateLoan?: boolean;
   declarationSigned: boolean;
+  signatureUrl?: string;
 }

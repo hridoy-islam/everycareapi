@@ -14,47 +14,17 @@ const getAllLogsFromDB = async (
   query: Record<string, unknown>,
   currentUser?: any
 ) => {
-  const { fromDate, toDate, userId, ...restQuery } = query;
 
-  let finalQuery: any = { ...restQuery };
 
-  // Default: If no date range provided, show current month
-  const now = moment();
-  if (!fromDate && !toDate) {
-    finalQuery.createdAt = {
-      $gte: now.startOf("month").toDate(),
-      $lte: now.endOf("month").toDate(),
-    };
-  } else if (fromDate || toDate) {
-    const dateFilter: any = {};
-    if (fromDate)
-      dateFilter.$gte = moment(fromDate as string)
-        .startOf("day")
-        .toDate();
-    if (toDate)
-      dateFilter.$lte = moment(toDate as string)
-        .endOf("day")
-        .toDate();
-    finalQuery.createdAt = dateFilter;
-  }
-
-  // Handle multiple userIds (comma-separated)
-  if (userId) {
-    const userIds = (userId as string).split(",").map((id) => id.trim());
-    finalQuery.userId = { $in: userIds };
-  } else if (currentUser?.role === "teacher"|| currentUser?.role === "admin") {
-    // If current user is a teacher, show only their logs by default
-    finalQuery.userId = currentUser._id;
-  }
 
  
 
   const LogsQuery = new QueryBuilder(
     Logs.find().populate("userId", "name"),
-    finalQuery
+    query
   )
     .search(LogsSearchableFields)
-    .filter(finalQuery)
+    .filter(query)
     .sort()
     .paginate()
     .fields();

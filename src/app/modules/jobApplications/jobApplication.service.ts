@@ -17,15 +17,22 @@ import axios from "axios";
 const getAllJobApplicationFromDB = async (query: Record<string, unknown>) => {
   const { searchTerm, ...otherQueryParams } = query;
 
-  const processedQuery: Record<string, any> = { ...otherQueryParams };
+  // Get only users who have completed their profile
+  const completedUserIds = await User.find({ isCompleted: true }).distinct("_id");
 
-
+  const processedQuery: Record<string, any> = {
+    ...otherQueryParams,
+    applicantId: { $in: completedUserIds },
+  };
 
   const ApplicationQuery = new QueryBuilder(
-    JobApplication.find().populate("jobId").populate({
-      path: "applicantId",
-      select: "title firstName initial lastName email phone dbsDone medicalDone ecertDone bankDetailsDone checkListDone jobOfferMailSent interviewMailSent referenceMailSent postEmploymentUnlock dbsUnlock ecertUnlock bankDetailsUnlock startDateUnlock",
-    }),
+    JobApplication.find({ applicantId: { $in: completedUserIds } })
+      .populate("jobId")
+      .populate({
+        path: "applicantId",
+        select:
+          "title firstName initial lastName email phone dbsDone medicalDone ecertDone bankDetailsDone checkListDone jobOfferMailSent interviewMailSent referenceMailSent postEmploymentUnlock dbsUnlock ecertUnlock bankDetailsUnlock startDateUnlock",
+      }),
     processedQuery
   )
     .filter(query)
@@ -41,7 +48,6 @@ const getAllJobApplicationFromDB = async (query: Record<string, unknown>) => {
     result,
   };
 };
-
 const getSingleJobApplicationFromDB = async (id: string) => {
   const result = await JobApplication.findById(id).populate("jobId");
   return result;
