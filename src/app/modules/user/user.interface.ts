@@ -528,6 +528,9 @@ export interface TUser {
   ecertDone: boolean;
   bankDetailsDone: boolean;
   checkListDone: boolean;
+  jobContractDone: boolean;
+  employementContractDone: boolean;
+  confidentialityFormDone: boolean;
 
 
   jobOfferMailSent: boolean;
@@ -538,6 +541,9 @@ export interface TUser {
   ecertUnlock: boolean;
   bankDetailsUnlock: boolean;
   startDateUnlock: boolean;
+  jobContractUnlock: boolean;
+  employementContractUnlock: boolean;
+  confidentialityFormUnlock: boolean;
 
   createdAt?: Date;
   updatedAt?: Date;

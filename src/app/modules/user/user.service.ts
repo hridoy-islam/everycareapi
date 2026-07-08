@@ -291,6 +291,9 @@ export const updateUserIntoDB = async (id: string, payload: Partial<TUser> & { j
     ecertDone: "E-Certificates uploaded.",
     bankDetailsDone: "Bank Details submitted.",
     checkListDone: "Starter Checklist completed.",
+    employementContractDone: "Employment Contract completed.",
+    jobContractDone: "Job Contract completed.",
+    confidentialityFormDone: "Confidentiality Form completed.",
   };
 
   for (const [field, logMessage] of Object.entries(completionFieldsMap)) {
@@ -441,6 +444,18 @@ export const updateUserIntoDB = async (id: string, payload: Partial<TUser> & { j
     startDateUnlock: {
         subject: "Starter Checklist Unlocked",
   message: "Your Starter Checklist is now available. Please complete and submit the required information.",
+    },
+    employementContractUnlock: {
+      subject: "Employment Contract Section Unlocked",
+      message: "Your Employment Contract section has been unlocked. You can now review and sign your employment contract.",
+    },
+    jobContractUnlock: {
+      subject: "Job Contract Section Unlocked",
+      message: "Your Job Contract section has been unlocked. You can now review and sign your job contract.",
+    },
+    confidentialityFormUnlock: {
+      subject: "Confidentiality Form Section Unlocked",
+      message: "Your Confidentiality Form section has been unlocked. You can now complete and submit the confidentiality agreement.",
     },
   };
 

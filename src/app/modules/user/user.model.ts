@@ -446,12 +446,18 @@ proofOfAddress2Type: { type: String, enum: ['bankStatement', 'utilityBill', 'dri
     jobOfferMailSent:{ type: Boolean, default: false },
     interviewMailSent:{ type: Boolean, default: false },
     referenceMailSent:{ type: Boolean, default: false },
+    employementContractDone:{ type: Boolean, default: false },
+    jobContractDone:{ type: Boolean, default: false },
+    confidentialityFormDone:{ type: Boolean, default: false },
     
     postEmploymentUnlock:{ type: Boolean, default: false },
     dbsUnlock:{ type: Boolean, default: false },
     ecertUnlock:{ type: Boolean, default: false },
     bankDetailsUnlock:{ type: Boolean, default: false },
     startDateUnlock:{ type: Boolean, default: false },
+    employementContractUnlock:{ type: Boolean, default: false },
+    jobContractUnlock:{ type: Boolean, default: false },
+    confidentialityFormUnlock:{ type: Boolean, default: false },
 
     // Timestamps
     createdAt: { type: Date },

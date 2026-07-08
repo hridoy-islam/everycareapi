@@ -18,6 +18,9 @@ import { BankDetailsRoutes } from "../modules/bankDetailsForm/bankDetailsFrom.ro
 import { MedicalQuestionRoutes } from "../modules/postMedicalQuestion/medicalQuestion.route";
 import { StarterChecklistRoutes } from "../modules/starterCheckListForm/starterCheckList.route";
 import { LogsRoutes } from "../modules/logs/logs.route";
+import { ConfidentialityFormRoutes } from "../modules/confidentialityForm/confidentialityForm.route";
+import { EmployementContractRoutes } from "../modules/employementContract/employementContract.route";
+import { JobContractRoutes } from "../modules/jobContract/jobContract.route";
 
 const router = Router();
 
@@ -96,6 +99,18 @@ const moduleRoutes = [
   {
     path: "/logs",
     route: LogsRoutes,
+  },
+  {
+    path: "/confidentiality",
+    route: ConfidentialityFormRoutes,
+  },
+  {
+    path: "/employement-contracts",
+    route: EmployementContractRoutes,
+  },
+  {
+    path: "/job-contracts",
+    route: JobContractRoutes,
   },
 ];
 
