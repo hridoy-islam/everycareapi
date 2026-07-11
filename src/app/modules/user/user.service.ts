@@ -12,7 +12,7 @@ import Logs from "../logs/logs.model";
 import { sendUnlockEmail } from "../../utils/sendUnlockEmail";
 
 const getAllUserFromDB = async (query: Record<string, unknown>) => {
-  const userQuery = new QueryBuilder(User.find(), query)
+  const userQuery = new QueryBuilder(User.find().populate('designationId'), query)
     .search(UserSearchableFields)
     .filter(query)
     .sort()

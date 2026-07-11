@@ -20,7 +20,7 @@ const userSchema = new Schema<TUser, UserModel>(
     },
     role: {
       type: String,
-      enum: ["user", "admin", "student", "applicant"],
+      enum: ["user", "admin", "student", "applicant","employee"],
       default: "applicant",
     },
     status: {
@@ -283,11 +283,17 @@ const userSchema = new Schema<TUser, UserModel>(
     passport: { type: [String], default: [] },
     workExperience: { type: [String], default: [] },
     personalStatement: { type: [String], default: [] },
-proofOfAddress1Type: { type: String, enum: ['bankStatement', 'utilityBill', 'drivingLicense'] },
-proofOfAddress2Type: { type: String, enum: ['bankStatement', 'utilityBill', 'drivingLicense'] },
-    rtwDocument:{type:String},
-    shareCodeDocument:{type:String},
-    signatureUrl:{type:String},
+    proofOfAddress1Type: {
+      type: String,
+      enum: ["bankStatement", "utilityBill", "drivingLicense"],
+    },
+    proofOfAddress2Type: {
+      type: String,
+      enum: ["bankStatement", "utilityBill", "drivingLicense"],
+    },
+    rtwDocument: { type: String },
+    shareCodeDocument: { type: String },
+    signatureUrl: { type: String },
 
     //  post employment
     sex: { type: String },
@@ -438,42 +444,48 @@ proofOfAddress2Type: { type: String, enum: ['bankStatement', 'utilityBill', 'dri
     ref2Submit: { type: Boolean, default: false },
     ref3Submit: { type: Boolean, default: false },
 
-    dbsDone:{ type: Boolean, default: false },
-    medicalDone:{ type: Boolean, default: false },
-    ecertDone:{ type: Boolean, default: false },
-    bankDetailsDone:{ type: Boolean, default: false },
-    checkListDone:{ type: Boolean, default: false },
-    jobOfferMailSent:{ type: Boolean, default: false },
-    interviewMailSent:{ type: Boolean, default: false },
-    referenceMailSent:{ type: Boolean, default: false },
-    jobContractDone:{ type: Boolean, default: false },
-    confidentialityFormDone:{ type: Boolean, default: false },
-    
-    postEmploymentUnlock:{ type: Boolean, default: false },
-    dbsUnlock:{ type: Boolean, default: false },
-    ecertUnlock:{ type: Boolean, default: false },
-    bankDetailsUnlock:{ type: Boolean, default: false },
-    startDateUnlock:{ type: Boolean, default: false },
-    jobContractUnlock:{ type: Boolean, default: false },
-    contractTypeId:{ type: Schema.Types.ObjectId, ref: 'ContractType' },
-    confidentialityFormUnlock:{ type: Boolean, default: false },
+    dbsDone: { type: Boolean, default: false },
+    medicalDone: { type: Boolean, default: false },
+    ecertDone: { type: Boolean, default: false },
+    bankDetailsDone: { type: Boolean, default: false },
+    checkListDone: { type: Boolean, default: false },
+    jobOfferMailSent: { type: Boolean, default: false },
+    interviewMailSent: { type: Boolean, default: false },
+    referenceMailSent: { type: Boolean, default: false },
+    jobContractDone: { type: Boolean, default: false },
+    confidentialityFormDone: { type: Boolean, default: false },
 
+    postEmploymentUnlock: { type: Boolean, default: false },
+    dbsUnlock: { type: Boolean, default: false },
+    ecertUnlock: { type: Boolean, default: false },
+    bankDetailsUnlock: { type: Boolean, default: false },
+    startDateUnlock: { type: Boolean, default: false },
+    jobContractUnlock: { type: Boolean, default: false },
+    contractTypeId: { type: Schema.Types.ObjectId, ref: "ContractType" },
+    confidentialityFormUnlock: { type: Boolean, default: false },
+    noRtwCheck: { type: Boolean },
+    designationId: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Designation",
+      },
+    ],
     // Timestamps
     createdAt: { type: Date },
     updatedAt: { type: Date },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 userSchema.statics.hashPassword = async function (
-  plainTextPassword: string
+  plainTextPassword: string,
 ): Promise<string> {
   try {
     const hashedPassword = await bcrypt.hash(
       plainTextPassword,
-      Number(config.bcrypt_salt_rounds)
+      Number(config.bcrypt_salt_rounds),
     );
     return hashedPassword;
   } catch (error) {
@@ -486,7 +498,7 @@ userSchema.pre("save", async function (next) {
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(
       user.password,
-      Number(config.bcrypt_salt_rounds)
+      Number(config.bcrypt_salt_rounds),
     );
   }
   next();
@@ -504,14 +516,14 @@ userSchema.statics.isUserExists = async function (email: string) {
 
 userSchema.statics.isPasswordMatched = async function (
   plainTextPassword,
-  hashedPassword
+  hashedPassword,
 ) {
   return await bcrypt.compare(plainTextPassword, hashedPassword);
 };
 
 userSchema.statics.isJWTIssuedBeforePasswordChanged = function (
   passwordChangedTimestamp: Date,
-  jwtIssuedTimestamp: number
+  jwtIssuedTimestamp: number,
 ) {
   const passwordChangedTime =
     new Date(passwordChangedTimestamp).getTime() / 1000;

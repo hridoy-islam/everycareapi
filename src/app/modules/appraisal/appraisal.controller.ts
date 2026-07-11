@@ -1,0 +1,76 @@
+import { RequestHandler } from "express";
+;
+import httpStatus from "http-status";
+
+import catchAsync from "../../utils/catchAsync";
+import sendResponse from "../../utils/sendResponse";
+import { AppraisalServices } from "./appraisal.service";
+
+const getAllAppraisal: RequestHandler = catchAsync(async (req, res) => {
+  const result = await AppraisalServices.getAllAppraisalFromDB(req.query);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Appraisal retrived succesfully",
+    data: result,
+  });
+});
+const getSingleAppraisal = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await AppraisalServices.getSingleAppraisalFromDB(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Single Appraisal is retrieved succesfully",
+    data: result,
+  });
+});
+
+const updateAppraisal = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await AppraisalServices.updateAppraisalIntoDB(id, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Appraisal is updated succesfully",
+    data: result,
+  });
+});
+
+const createAppraisal = catchAsync(async (req, res) => {
+  
+  const result = await AppraisalServices.createAppraisalIntoDB( req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Appraisal Created succesfully",
+    data: result,
+  });
+});
+
+const updateAppraisalLog = catchAsync(async (req, res) => {
+  const { id, logId } = req.params;
+
+  const result = await AppraisalServices.updateAppraisalLogIntoDB(
+    id,
+    logId,
+    req.body
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Appraisal log document updated successfully",
+    data: result,
+  });
+});
+
+export const AppraisalControllers = {
+
+    getAllAppraisal,
+    getSingleAppraisal,
+    createAppraisal,
+    updateAppraisal,    
+    updateAppraisalLog
+};
+

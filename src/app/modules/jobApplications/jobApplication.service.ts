@@ -18,7 +18,7 @@ const getAllJobApplicationFromDB = async (query: Record<string, unknown>) => {
   const { searchTerm, applicantId, ...otherQueryParams } = query;
 
   // Get only users who have completed their profile
-  const completedUserIds = await User.find({ isCompleted: true }).distinct("_id");
+  const completedUserIds = await User.find({ isCompleted: true,  role: "applicant" }).distinct("_id");
 
   const processedQuery: Record<string, any> = {
     ...otherQueryParams,

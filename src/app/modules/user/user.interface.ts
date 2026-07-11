@@ -543,7 +543,8 @@ export interface TUser {
   jobContractUnlock: boolean;
   confidentialityFormUnlock: boolean;
   contractTypeId: Types.ObjectId;
-
+  designationId: Types.ObjectId[];
+noRtwCheck:boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
