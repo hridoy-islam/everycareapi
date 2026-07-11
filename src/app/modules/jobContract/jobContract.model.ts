@@ -6,9 +6,11 @@ const JobContractSchema = new Schema<TJobContract>(
   {
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 
-    // Applicant Info
-    name: { type: String },
-    jobStartDate: { type: Date },
+    contractTypeId:{ type: Schema.Types.ObjectId, ref: 'ContractType',required: true },
+
+    contractContent:{ type: String,required:true },
+
+
     signatureUrl: { type: String },
     
   },

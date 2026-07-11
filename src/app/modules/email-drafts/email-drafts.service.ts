@@ -71,6 +71,18 @@ const updateEmailDraftIntoDB = async (id: string, payload: Partial<TEmailDraft>)
 
   return result;
 };
+const deleteEmailDraftIntoDB = async (id: string) => {
+  const emailDraft = await EmailDraft.findById(id);
+
+  if (!emailDraft) {
+    throw new AppError(httpStatus.NOT_FOUND, "EmailDraft not found");
+  }
+
+  // Update only the selected user
+  const result = await EmailDraft.findByIdAndDelete(id);
+
+  return result;
+};
 
 
 
@@ -81,7 +93,8 @@ export const EmailDraftServices = {
   getAllEmailDraftFromDB,
   getSingleEmailDraftFromDB,
   updateEmailDraftIntoDB,
-  createEmailDraftIntoDB
+  createEmailDraftIntoDB,
+  deleteEmailDraftIntoDB
   
 
 };

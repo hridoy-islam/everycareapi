@@ -1,11 +1,9 @@
 /* eslint-disable no-unused-vars */
-import { Model, Types } from 'mongoose';
+import { Types } from 'mongoose';
 
 export interface TJobContract {
   userId: Types.ObjectId;
-  // Applicant Info
-  name: string;
-  jobStartDate: Date;
+  contractTypeId: Types.ObjectId;
+  contractContent: string;
   signatureUrl: string;
-  
 }

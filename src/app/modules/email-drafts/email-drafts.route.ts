@@ -27,6 +27,11 @@ router.patch(
   auth("admin"),
   EmailDraftControllers.updateEmailDraft
 );
+router.delete(
+  "/:id",
+  auth("admin"),
+  EmailDraftControllers.deleteEmailDraft
+);
 
 
 export const EmailDraftRoutes = router;

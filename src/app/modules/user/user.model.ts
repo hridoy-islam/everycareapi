@@ -446,7 +446,6 @@ proofOfAddress2Type: { type: String, enum: ['bankStatement', 'utilityBill', 'dri
     jobOfferMailSent:{ type: Boolean, default: false },
     interviewMailSent:{ type: Boolean, default: false },
     referenceMailSent:{ type: Boolean, default: false },
-    employementContractDone:{ type: Boolean, default: false },
     jobContractDone:{ type: Boolean, default: false },
     confidentialityFormDone:{ type: Boolean, default: false },
     
@@ -455,8 +454,8 @@ proofOfAddress2Type: { type: String, enum: ['bankStatement', 'utilityBill', 'dri
     ecertUnlock:{ type: Boolean, default: false },
     bankDetailsUnlock:{ type: Boolean, default: false },
     startDateUnlock:{ type: Boolean, default: false },
-    employementContractUnlock:{ type: Boolean, default: false },
     jobContractUnlock:{ type: Boolean, default: false },
+    contractTypeId:{ type: Schema.Types.ObjectId, ref: 'ContractType' },
     confidentialityFormUnlock:{ type: Boolean, default: false },
 
     // Timestamps

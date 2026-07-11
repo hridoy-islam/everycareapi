@@ -21,6 +21,8 @@ import { LogsRoutes } from "../modules/logs/logs.route";
 import { ConfidentialityFormRoutes } from "../modules/confidentialityForm/confidentialityForm.route";
 import { EmployementContractRoutes } from "../modules/employementContract/employementContract.route";
 import { JobContractRoutes } from "../modules/jobContract/jobContract.route";
+import { DesignationRoutes } from "../modules/designation/designation.router";
+import { ContractTypeRoutes } from "../modules/contractType/contractType.router";
 
 const router = Router();
 
@@ -112,6 +114,15 @@ const moduleRoutes = [
     path: "/job-contracts",
     route: JobContractRoutes,
   },
+  {
+    path: "/designation",
+    route: DesignationRoutes,
+  },
+  {
+    path: "/contract-type",
+    route: ContractTypeRoutes,
+  },
+
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

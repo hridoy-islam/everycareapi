@@ -15,14 +15,16 @@ import { User } from "../user/user.model";
 import axios from "axios";
 
 const getAllJobApplicationFromDB = async (query: Record<string, unknown>) => {
-  const { searchTerm, ...otherQueryParams } = query;
+  const { searchTerm, applicantId, ...otherQueryParams } = query;
 
   // Get only users who have completed their profile
   const completedUserIds = await User.find({ isCompleted: true }).distinct("_id");
 
   const processedQuery: Record<string, any> = {
     ...otherQueryParams,
-    applicantId: { $in: completedUserIds },
+    // If a specific applicantId was requested, respect it.
+    // Otherwise, restrict to completed users only.
+    applicantId: applicantId ? applicantId : { $in: completedUserIds },
   };
 
   const ApplicationQuery = new QueryBuilder(
@@ -35,7 +37,7 @@ const getAllJobApplicationFromDB = async (query: Record<string, unknown>) => {
       }),
     processedQuery
   )
-    .filter(query)
+    .filter(processedQuery)
     .sort()
     .paginate()
     .fields();
@@ -48,6 +50,8 @@ const getAllJobApplicationFromDB = async (query: Record<string, unknown>) => {
     result,
   };
 };
+
+
 const getSingleJobApplicationFromDB = async (id: string) => {
   const result = await JobApplication.findById(id).populate("jobId");
   return result;

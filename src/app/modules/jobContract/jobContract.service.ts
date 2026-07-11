@@ -6,7 +6,7 @@ import { TJobContract } from "./jobContract.interface";
 import { JobContractSearchableFields } from "./jobContract.constant";
 
 const getAllJobContractFromDB = async (query: Record<string, unknown>) => {
-  const JobContractQuery = new QueryBuilder(JobContract.find(), query)
+  const JobContractQuery = new QueryBuilder(JobContract.find().populate("userId","name email"), query)
     .search(JobContractSearchableFields)
     .filter(query)
     .sort()

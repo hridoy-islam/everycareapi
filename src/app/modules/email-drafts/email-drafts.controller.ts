@@ -46,6 +46,16 @@ const updateEmailDraft = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const deleteEmailDraft = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await EmailDraftServices.deleteEmailDraftIntoDB(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "EmailDraft is deleted succesfully",
+    data: result,
+  });
+});
 
 
 
@@ -54,5 +64,6 @@ export const EmailDraftControllers = {
   getAllEmailDraft,
   getSingleEmailDraft,
   updateEmailDraft,
-  EmailDraftCreate
+  EmailDraftCreate,
+  deleteEmailDraft
 };

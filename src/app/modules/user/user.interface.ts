@@ -529,7 +529,6 @@ export interface TUser {
   bankDetailsDone: boolean;
   checkListDone: boolean;
   jobContractDone: boolean;
-  employementContractDone: boolean;
   confidentialityFormDone: boolean;
 
 
@@ -542,8 +541,8 @@ export interface TUser {
   bankDetailsUnlock: boolean;
   startDateUnlock: boolean;
   jobContractUnlock: boolean;
-  employementContractUnlock: boolean;
   confidentialityFormUnlock: boolean;
+  contractTypeId: Types.ObjectId;
 
   createdAt?: Date;
   updatedAt?: Date;
