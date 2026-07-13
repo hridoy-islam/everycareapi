@@ -3,6 +3,79 @@ import { Model, Types } from "mongoose";
 import { USER_ROLE } from "./user.constant";
 import e from "express";
 
+
+
+export interface RightToWork {
+  hasExpiry?: boolean;
+  expiryDate?: Date;
+}
+
+export interface Payroll {
+  payrollNumber?: string;
+  paymentMethod?: "bank-transfer" | "cheque" | "cash";
+}
+
+export interface EqualityInformation {
+  nationality?: string;
+  religion?: string;
+  hasDisability?: boolean;
+  disabilityDetails?: string;
+}
+
+export interface Address {
+  line1?: string;
+  line2?: string;
+  city?: string;
+  state?: string;
+  postCode?: string;
+  country?: string;
+}
+
+export interface BeneficiaryDetails {
+  fullName?: string;
+  relationship?: string;
+  email?: string;
+  mobile?: string;
+  sameAddress?: boolean;
+  address?: Address;
+}
+
+
+export interface EmergencyContact {
+  emergencyContactName: string;
+  relationship: string;
+  address: string;
+  cityOrTown: string;
+  country: string;
+  postCode: string;
+  note: string;
+  phone: string;
+  mobile: string;
+  email: string;
+  emailRota: boolean;
+  sendInvoice: boolean;
+}
+
+export interface CriticalInfo {
+  date: string;
+  type: string | null;
+  details: string;
+}
+
+export interface PrimaryBranch {
+  fromDate: string;
+  branch: string;
+  area: string;
+  note: string;
+}
+
+export interface NoteItem {
+  date: string;
+  type: string;
+  note: string;
+}
+
+
 export interface BrowserInfo {
   name?: string;
   version?: string;
@@ -545,6 +618,111 @@ export interface TUser {
   contractTypeId: Types.ObjectId;
   designationId: Types.ObjectId[];
 noRtwCheck:boolean;
+
+
+
+
+
+
+
+
+
+// Personal details
+  serviceUserType: string;
+  middleInitial?: string;
+  mobilePhone:string;
+  contractHours:number;
+  otherPhone:string;
+  preferredName?: string;
+  gender?: string;
+  maritalStatus?: string;
+  ethnicOrigin?: string;
+  religion?: string;
+  preferredLanguage?: string;
+
+  // Documents & identifiers
+  passportNo?: string;
+  passportExpiry?: Date;
+  nhsNumber?: string;
+
+  // Address & location
+  city?: string;
+  country?: string;
+  stateOrProvince?: string;
+  cityOrTown?: string;
+
+  // Contact information
+  fax?: string;
+  homePhone:string;
+  mobile?: string;
+  other?: string;
+  phoneNumber?: string;
+  emergencyContact?: string;
+  emergencyPhone?: string;
+  emailAlt?: string;
+  website?: string;
+
+  // Employment / service details
+  startDate?: Date | string;
+  lastDutyDate?: Date | string;
+  servicePriority?: string;
+  serviceLocationExId?: string;
+  statusLabel?: string;
+  
+
+  // Payroll & finance
+  accountNo?: string;
+  beneficiary?: string;
+  payroll?: Payroll;
+  detailedBeneficiary?: BeneficiaryDetails;
+  themeColor:string;
+  // Company & relations
+  companyId?: Types.ObjectId;
+  colleagues?: Types.ObjectId[];
+  departmentId?: Types.ObjectId;
+  training?: any[];
+
+  // Employment application data
+  startDateEmployee:Date;
+  vacancyId?: Types.ObjectId;
+  recruitmentId?: Types.ObjectId;
+  applicantId?: Types.ObjectId;
+  applicationDate?: Date;
+  availableFrom?: Date;
+  employmentType?: string;
+  recruitmentEmploymentType?: "full-time" | "part-time" | "contractor" | "temporary" | "intern";
+  position?: string;
+  branch?: string;
+  area?: string;
+  isFullTime?: boolean;
+  carTravelAllowance?: boolean;
+
+  // Legal & compliance
+  rightToWork?: RightToWork;
+  wtrDocumentUrl?: string;
+
+  // Extra fields from schema
+  timesheetSignature?: boolean;
+  timesheetSignatureNote?: string;
+
+  // Equality & adjustments
+  disability?: string;
+  ethnicity?: string;
+
+  equalityInformation?: EqualityInformation;
+
+  // Media
+  profilePictureUrl?: string;
+
+
+  // Complex nested arrays
+  emergencyContacts?: EmergencyContact[];
+  criticalInfo?: CriticalInfo[];
+  primaryBranch?: PrimaryBranch[];
+  notes?: NoteItem[];
+
+
+
   createdAt?: Date;
   updatedAt?: Date;
 }

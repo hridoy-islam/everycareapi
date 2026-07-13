@@ -275,7 +275,10 @@ const createUserIntoDB = async (payload: TCreateUser) => {
   const user = await User.isUserExists(payload.email);
   if (user) {
     throw new AppError(httpStatus.NOT_FOUND, "This user is already exits!");
+  }if (!payload.password) {
+    payload.password = "123456";
   }
+
 
   const { otp, otpExpiry } = generateOtpAndExpiry();
   const newUserPayload = {

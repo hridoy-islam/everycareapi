@@ -10,6 +10,8 @@ import crypto from "crypto";
 import { sendModuleEmail } from "../../utils/sendModulesEmail";
 import Logs from "../logs/logs.model";
 import { sendUnlockEmail } from "../../utils/sendUnlockEmail";
+import config from "../../config";
+import bcrypt from "bcrypt";
 
 const getAllUserFromDB = async (query: Record<string, unknown>) => {
   const userQuery = new QueryBuilder(User.find().populate('designationId'), query)
@@ -278,7 +280,10 @@ export const updateUserIntoDB = async (id: string, payload: Partial<TUser> & { j
       .trim()
       .replace(/\s+/g, " "); // Replace multiple spaces with single space
   }
-
+  if (payload.password) {
+    // Hash the password before updating if it's provided
+    payload.password = await bcrypt.hash(payload.password, Number(config.bcrypt_salt_rounds));
+  }
   // ✅ Update user data
   const result = await User.findByIdAndUpdate(id, userPayload, {
     new: true,

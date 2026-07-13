@@ -5,6 +5,103 @@ import config from "../../config";
 import { UserStatus } from "./user.constant";
 import { TUser, UserModel } from "./user.interface";
 
+
+
+
+
+const RightToWorkSchema = new Schema({
+  hasExpiry: {
+    type: Boolean,
+  },
+  expiryDate: {
+    type: Date,
+  },
+});
+
+const PayrollSchema = new Schema({
+  payrollNumber: {
+    type: String,
+  },
+  paymentMethod: {
+    type: String,
+  },
+});
+
+const EqualityInformationSchema = new Schema({
+  nationality: {
+    type: String,
+  },
+  religion: {
+    type: String,
+  },
+  hasDisability: {
+    type: Boolean,
+  },
+  disabilityDetails: {
+    type: String,
+  },
+});
+
+const AddressSchema = new Schema({
+  line1: { type: String },
+  line2: { type: String },
+  city: { type: String },
+  state: { type: String },
+  postCode: { type: String },
+  country: { type: String },
+});
+
+const BeneficiarySchema = new Schema({
+  fullName: { type: String },
+  relationship: { type: String },
+  email: { type: String },
+  mobile: { type: String },
+  sameAddress: { type: Boolean, default: false },
+  address: {
+    type: AddressSchema,
+  },
+});
+
+// Emergency Contact Schema
+const EmergencyContactSchema = new Schema({
+  emergencyContactName: { type: String },
+  relationship: { type: String },
+  address: { type: String },
+  cityOrTown: { type: String },
+  country: { type: String },
+  postCode: { type: String },
+  note: { type: String },
+  phone: { type: String },
+  mobile: { type: String },
+  email: { type: String },
+  emailRota: { type: Boolean, default: false },
+  sendInvoice: { type: Boolean, default: false },
+});
+
+// Critical Info Schema
+const CriticalInfoSchema = new Schema({
+  date: { type: Date },
+  type: { type: String }, // can be dropdown later
+  details: { type: String },
+});
+
+// Primary Branch Schema
+const PrimaryBranchSchema = new Schema({
+  fromDate: { type: Date },
+  branch: { type: String },
+  area: { type: String },
+  note: { type: String },
+});
+
+// Notes Schema
+const NotesSchema = new Schema({
+  date: { type: Date },
+  type: { type: String },
+  note: { type: String },
+});
+
+
+
 const userSchema = new Schema<TUser, UserModel>(
   {
     name: { type: String },
@@ -20,7 +117,7 @@ const userSchema = new Schema<TUser, UserModel>(
     },
     role: {
       type: String,
-      enum: ["user", "admin", "student", "applicant","employee"],
+      enum: ["user", "admin", "student", "applicant","employee","serviceUser"],
       default: "applicant",
     },
     status: {
@@ -470,9 +567,127 @@ const userSchema = new Schema<TUser, UserModel>(
         ref: "Designation",
       },
     ],
-    // Timestamps
-    createdAt: { type: Date },
-    updatedAt: { type: Date },
+
+
+
+
+
+
+
+
+
+    
+    // Finance
+    accountNo: { type: String },
+    beneficiary: { type: String },
+    detailedBeneficiary: { type: BeneficiarySchema },
+
+
+    middleInitial: { type: String },
+  
+    preferredName: { type: String },
+    
+    gender: { type: String },
+    maritalStatus: { type: String },
+    ethnicOrigin: { type: String },
+    religion: { type: String },
+    serviceUserType: { type: String },
+
+    // Address & Location
+    city: { type: String },
+    country: { type: String },
+    stateOrProvince: { type: String },
+    cityOrTown: { type: String },
+
+    // Contact Information
+    fax: { type: String },
+    mobile: { type: String },
+    otherPhone: { type: String },
+    homePhone: { type: String },
+    website: { type: String },
+    themeColor:{type:String, default:'#6651c2'},
+
+    // Employment / Service Details
+    startDate: { type: Date },
+    lastDutyDate: { type: Date },
+    statusLabel: { type: String }, // dropdown
+    servicePriority: { type: String }, // dropdown
+    serviceLocationExId: { type: String },
+    timesheetSignature: { type: Boolean },
+    timesheetSignatureNote: { type: String },
+
+    // Employee model fields
+    contractHours:{type:Number},
+    nhsNumber: { type: String },
+    applicationDate: { type: Date },
+    availableFrom: { type: Date },
+    employmentType: { type: String },
+    position: { type: String },
+    branch: { type: String },
+    area: { type: String },
+    startDateEmployee: { type: Date },
+    wtrDocumentUrl: { type: String },
+    isFullTime: { type: Boolean },
+    carTravelAllowance: { type: Boolean },
+    recruitmentEmploymentType: {
+      type: String,
+      enum: ["full-time", "part-time", "contractor", "temporary", "intern"],
+    },
+    recruitmentId: { type: Schema.Types.ObjectId, ref: "Recruitment" },
+    applicantId: { type: Schema.Types.ObjectId, ref: "Applicant" },
+
+ 
+    equalityInformation: { type: EqualityInformationSchema },
+
+    // Payroll & compliance
+    rightToWork: { type: RightToWorkSchema },
+    payroll: { type: PayrollSchema },
+
+    // Embedded Arrays
+    emergencyContacts: {
+      type: [EmergencyContactSchema],
+      default: () => [
+        {
+          emergencyContactName: undefined,
+          relationship: undefined,
+          address: undefined,
+          cityOrTown: undefined,
+          country: undefined,
+          postCode: undefined,
+          note: undefined,
+          phone: undefined,
+          mobile: undefined,
+          email: undefined,
+          emailRota: false,
+          sendInvoice: false,
+        },
+      ],
+    },
+
+    criticalInfo: {
+      type: [CriticalInfoSchema],
+      default: () => [
+        {
+          date: undefined,
+          type: undefined,
+          details: undefined,
+        },
+      ],
+    },
+
+    primaryBranch: {
+      type: [PrimaryBranchSchema],
+      default: () => [
+        {
+          fromDate: undefined,
+          branch: undefined,
+          area: undefined,
+          note: undefined,
+        },
+      ],
+    },
+    notes: [NotesSchema],
+
   },
   {
     timestamps: true,

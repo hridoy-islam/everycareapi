@@ -38,6 +38,10 @@ import { SupervisionRoutes } from "../modules/supervision/supervision.route";
 import { VisaCheckRoutes } from "../modules/visaCheck/visaCheck.router";
 import { LeaverRoutes } from "../modules/leaver/leaver.router";
 import { RightToWorkRoutes } from "../modules/rightToWork/rightToWork.router";
+import { ServiceUserScheduleRoutes } from "../modules/serviceUserSchedule/serviceUserSchedule.router";
+import { ServiceTypeRoutes } from "../modules/serviceType/serviceType.router";
+import { FunderRoutes } from "../modules/funder/funder.router";
+import { ScheduleRoutes } from "../modules/schedule/schedule.router";
 
 const router = Router();
 
@@ -201,6 +205,20 @@ const moduleRoutes = [
     {
     path: "/leaver",
     route: LeaverRoutes,
+  },   {
+    path: "/service-Type",
+    route: ServiceTypeRoutes,
+  },
+   {
+    path: "/serviceuser-schedule",
+    route: ServiceUserScheduleRoutes,
+  },  {
+    path: "/service-funder",
+    route: FunderRoutes,
+  },
+  {
+    path: "/schedules",
+    route: ScheduleRoutes,
   },
 
 ];
