@@ -289,24 +289,17 @@ const createUserIntoDB = async (payload: TCreateUser) => {
 
   const result = await User.create(newUserPayload);
 
-  try {
-    // const emailSubject = 'Your Password Reset OTP';
-    // await sendEmail(
-    //   payload.email,
-    //   'reset_password_template',
-    //   emailSubject,
-    //   payload.name,
-    //   otp
-    // );
-
-    await sendEmail(
-      payload.email,
-      "welcome_template",
-      "Welcome to Everycare Romford – Your account is active",
-      payload.name
-    );
-  } catch (error) {
-    console.error("Error sending welcome email:", error);
+ if (payload.role !== "serviceUser") {
+    try {
+      await sendEmail(
+        payload.email,
+        "welcome_template",
+        "Welcome to Everycare Romford – Your account is active",
+        payload.name
+      );
+    } catch (error) {
+      console.error("Error sending welcome email:", error);
+    }
   }
 
   return result;

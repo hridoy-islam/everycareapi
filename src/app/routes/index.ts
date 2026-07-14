@@ -42,6 +42,8 @@ import { ServiceUserScheduleRoutes } from "../modules/serviceUserSchedule/servic
 import { ServiceTypeRoutes } from "../modules/serviceType/serviceType.router";
 import { FunderRoutes } from "../modules/funder/funder.router";
 import { ScheduleRoutes } from "../modules/schedule/schedule.router";
+import { NeedsRoutes } from "../modules/needs/needs.route";
+import { ServiceuserNeedRoutes } from "../modules/serviceuserNeed/serviceuserNeed.route";
 
 const router = Router();
 
@@ -220,6 +222,15 @@ const moduleRoutes = [
     path: "/schedules",
     route: ScheduleRoutes,
   },
+  {
+    path: "/needs",
+    route: NeedsRoutes,
+  },
+  {
+    path: "/serviceuser-needs",
+    route: ServiceuserNeedRoutes,
+  },
+
 
 ];
 
