@@ -44,6 +44,7 @@ import { FunderRoutes } from "../modules/funder/funder.router";
 import { ScheduleRoutes } from "../modules/schedule/schedule.router";
 import { NeedsRoutes } from "../modules/needs/needs.route";
 import { ServiceuserNeedRoutes } from "../modules/serviceuserNeed/serviceuserNeed.route";
+import { ServiceuserEmergencyContractRoutes } from "../modules/serviceuserEmergencyContract/serviceuserEmergencyContract.route";
 
 const router = Router();
 
@@ -229,6 +230,10 @@ const moduleRoutes = [
   {
     path: "/serviceuser-needs",
     route: ServiceuserNeedRoutes,
+  },
+  {
+    path: "/serviceuser-emergency-contract",
+    route: ServiceuserEmergencyContractRoutes,
   },
 
 
