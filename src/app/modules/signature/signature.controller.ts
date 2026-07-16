@@ -46,6 +46,16 @@ const updateSignature = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const deleteSignature = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await SignatureServices.deleteSignatureIntoDB(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Signature is deleted succesfully",
+    data: result,
+  });
+});
 
 
 
@@ -54,5 +64,6 @@ export const SignatureControllers = {
   getAllSignature,
   getSingleSignature,
   updateSignature,
-  SignatureCreate
+  SignatureCreate,
+  deleteSignature
 };

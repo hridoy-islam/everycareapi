@@ -616,6 +616,7 @@ export interface TUser {
   jobContractUnlock: boolean;
   confidentialityFormUnlock: boolean;
   contractTypeId: Types.ObjectId;
+  jobContractTemplate: string;
   designationId: Types.ObjectId[];
 noRtwCheck:boolean;
 

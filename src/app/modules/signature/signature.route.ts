@@ -27,6 +27,11 @@ router.patch(
   // auth("admin", "agent", "staff"),
   SignatureControllers.updateSignature
 );
+router.delete(
+  "/:id",
+  // auth("admin", "agent", "staff"),
+  SignatureControllers.deleteSignature
+);
 
 
 export const SignatureRoutes = router;

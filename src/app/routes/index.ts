@@ -45,6 +45,7 @@ import { ScheduleRoutes } from "../modules/schedule/schedule.router";
 import { NeedsRoutes } from "../modules/needs/needs.route";
 import { ServiceuserNeedRoutes } from "../modules/serviceuserNeed/serviceuserNeed.route";
 import { ServiceuserEmergencyContractRoutes } from "../modules/serviceuserEmergencyContract/serviceuserEmergencyContract.route";
+import { ServiceuserAssessmentFormRoutes } from "../modules/serviceuserAssessmentForm/serviceuserAssessmentForm.route";
 
 const router = Router();
 
@@ -234,6 +235,10 @@ const moduleRoutes = [
   {
     path: "/serviceuser-emergency-contract",
     route: ServiceuserEmergencyContractRoutes,
+  },
+  {
+    path: "/serviceuser-assessment",
+    route: ServiceuserAssessmentFormRoutes,
   },
 
 

@@ -559,6 +559,7 @@ const userSchema = new Schema<TUser, UserModel>(
     startDateUnlock: { type: Boolean, default: false },
     jobContractUnlock: { type: Boolean, default: false },
     contractTypeId: { type: Schema.Types.ObjectId, ref: "ContractType" },
+    jobContractTemplate: { type: String },
     confidentialityFormUnlock: { type: Boolean, default: false },
     noRtwCheck: { type: Boolean },
     designationId: [

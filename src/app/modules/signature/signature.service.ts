@@ -73,7 +73,16 @@ const updateSignatureIntoDB = async (id: string, payload: Partial<TSignature>) =
 };
 
 
+ const deleteSignatureIntoDB = async (id: string) => {
+  const signature = await Signature.findById(id);
 
+  if (!signature) {
+    throw new AppError(httpStatus.NOT_FOUND, "Signature not found");
+  }
+
+  const result = await Signature.findByIdAndDelete(id);
+  return result;
+};
 
 
 
@@ -81,7 +90,8 @@ export const SignatureServices = {
   getAllSignatureFromDB,
   getSingleSignatureFromDB,
   updateSignatureIntoDB,
-  createSignatureIntoDB
+  createSignatureIntoDB,
+  deleteSignatureIntoDB
   
 
 };
