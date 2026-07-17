@@ -24,7 +24,7 @@ const getAllServiceuserAssessmentFormFromDB = async (query: Record<string, unkno
 };
 
 const getSingleServiceuserAssessmentFormFromDB = async (id: string) => {
-  const result = await ServiceuserAssessmentForm.findById(id);
+  const result = await ServiceuserAssessmentForm.findById(id).populate('completedBy','name').populate('lastReviewedBy','name');
   return result;
 };
 

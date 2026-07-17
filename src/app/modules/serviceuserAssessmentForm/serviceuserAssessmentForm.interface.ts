@@ -1,68 +1,10 @@
 /* eslint-disable no-unused-vars */
 import { Model, Types } from "mongoose";
 
-export interface TContact {
-  name?: string;
-  address?: string;
-  telephone?: string;
-}
-
-export interface TMaintenanceOutcome {
-  name?: string;
-  date?: Date;
-  desiredOutcome?: string;
-  whatICanStillDoForMyself?: string;
-  whatIFindDifficult?: string;
-  thingsIEnjoy?: string;
-  thingsIDoNotLike?: string;
-  howAndWhereIPreferToEat?: string;
-  thingsIMustHave?: string;
-  howYouCanHelpMe?: string;
-  identifiedRisks?: string;
-}
-
-export interface TChangeOutcome {
-  name?: string;
-  date?: Date;
-  desiredOutcome?: string;
-  howYouCanHelpMeImprove?: string;
-  howYouCanSupportMeToImprove?: string;
-  other?: string;
-}
-
-export interface TServiceProcessOutcome {
-  name?: string;
-  date?: Date;
-  desiredOutcome?: string;
-  howYouWillSupportMe?: string;
-}
-
-export interface TInformationFrom {
-  person?: boolean;
-  relative?: boolean;
-  agencies?: boolean;
-  other?: boolean;
-  observation?: boolean;
-}
-
-export interface TContacts {
-  socialWorker?: TContact;
-  generalPractitioner?: TContact;
-  hospitalConsultants?: TContact;
-  pharmacist?: TContact;
-  communityNurse?: TContact;
-  nextOfKin1?: TContact;
-  nextOfKin2?: TContact;
-  keyHolder?: TContact;
-  otherAgency?: TContact;
-}
-
 export interface TServiceuserAssessmentForm {
-  // Reference
-  serviceUserId?: Types.ObjectId;
 
   // Core identifiers
-  serviceUserIdNumber: string; // Required and unique in schema
+  serviceUserIdNumber?: string;
   dateOfAssessment?: Date;
   assessorName?: string;
   assessorSignature?: string;
@@ -81,10 +23,36 @@ export interface TServiceuserAssessmentForm {
   tipsForTalkingToMe?: string;
   criticalCareAndSupportNeeds?: string[];
 
-  // Contacts
-  contacts?: TContacts;
+  // Contacts — flat Name / Address / Telephone per contact
+  socialWorkerName?: string;
+  socialWorkerAddress?: string;
+  socialWorkerTelephone?: string;
+  generalPractitionerName?: string;
+  generalPractitionerAddress?: string;
+  generalPractitionerTelephone?: string;
+  hospitalConsultantsName?: string;
+  hospitalConsultantsAddress?: string;
+  hospitalConsultantsTelephone?: string;
+  pharmacistName?: string;
+  pharmacistAddress?: string;
+  pharmacistTelephone?: string;
+  communityNurseName?: string;
+  communityNurseAddress?: string;
+  communityNurseTelephone?: string;
+  nextOfKin1Name?: string;
+  nextOfKin1Address?: string;
+  nextOfKin1Telephone?: string;
+  nextOfKin2Name?: string;
+  nextOfKin2Address?: string;
+  nextOfKin2Telephone?: string;
+  keyHolderName?: string;
+  keyHolderAddress?: string;
+  keyHolderTelephone?: string;
+  otherAgencyName?: string;
+  otherAgencyAddress?: string;
+  otherAgencyTelephone?: string;
 
-  // Background / Needs Assessment
+  // Background / needs assessment
   importantAboutMyPast?: string;
   howMyPastAffectsMeToday?: string;
   howToSupportMeWithMyPast?: string;
@@ -98,24 +66,74 @@ export interface TServiceuserAssessmentForm {
   howToHelpSustainMyBeliefs?: string;
   specificSupportInformation?: string;
 
-  // Outcomes
-  maintenancePreventionOutcomes?: TMaintenanceOutcome[];
-  changeOutcomes?: TChangeOutcome[];
-  serviceProcessOutcomes?: TServiceProcessOutcome[];
+  // Maintenance / Prevention Outcomes — 9 outcomes, each flattened
+  physicalNeedsCanDo?: string;
+  physicalNeedsFindDifficult?: string;
+  physicalNeedsHelp?: string;
+  physicalNeedsRisks?: string;
+  cleanPresentableCanDo?: string;
+  cleanPresentableFindDifficult?: string;
+  cleanPresentableHelp?: string;
+  cleanPresentableRisks?: string;
+  foodAndDrinkCanDo?: string;
+  foodAndDrinkFindDifficult?: string;
+  foodAndDrinkThingsIEnjoy?: string;
+  foodAndDrinkThingsIDoNotLike?: string;
+  foodAndDrinkHowAndWhereIPreferToEat?: string;
+  foodAndDrinkThingsIMustHave?: string;
+  foodAndDrinkHelp?: string;
+  foodAndDrinkRisks?: string;
+  physicallyComfortableCanDo?: string;
+  physicallyComfortableFindDifficult?: string;
+  physicallyComfortableHelp?: string;
+  physicallyComfortableRisks?: string;
+  personalSafetyCanDo?: string;
+  personalSafetyFindDifficult?: string;
+  personalSafetyHelp?: string;
+  personalSafetyRisks?: string;
+  cleanTidyHomeCanDo?: string;
+  cleanTidyHomeFindDifficult?: string;
+  cleanTidyHomeHelp?: string;
+  cleanTidyHomeRisks?: string;
+  alertAndActiveCanDo?: string;
+  alertAndActiveFindDifficult?: string;
+  alertAndActiveHelp?: string;
+  alertAndActiveRisks?: string;
+  socialContactCanDo?: string;
+  socialContactFindDifficult?: string;
+  socialContactHelp?: string;
+  socialContactRisks?: string;
+  dailyRoutinesCanDo?: string;
+  dailyRoutinesFindDifficult?: string;
+  dailyRoutinesHelp?: string;
+  dailyRoutinesRisks?: string;
+
+  // Change Outcomes (flat)
+  physicalSymptomsHelpImprove?: string;
+  physicalSymptomsSupportImprove?: string;
+  physicalSymptomsOther?: string;
+  moraleWellbeingSupportImprove?: string;
+
+  // Service Process Outcomes (flat)
+  feelingValuedRespectedSupport?: string;
+  treatedAsIndividualSupport?: string;
+  sayAndControlSupport?: string;
+  culturalReligiousCompatibilitySupport?: string;
 
   // Sign-off
   completedBy?: string;
   completedDate?: Date;
   lastReviewedBy?: string;
   lastReviewedDate?: Date;
-
-  informationFrom?: TInformationFrom;
-
+  informationFromPerson?: boolean;
+  informationFromRelative?: boolean;
+  informationFromAgencies?: boolean;
+  informationFromOther?: boolean;
+  informationFromObservation?: boolean;
   signatureOfPerson?: string;
   signatureOfRelative?: string;
 
-  // Completion status
-  isCompleted?: boolean; // Added this field
+  isCompleted?: boolean;
 
   // Timestamps
   createdAt?: Date;

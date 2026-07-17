@@ -1,3 +1,3 @@
 
 
-export const ServiceuserAssessmentFormSearchableFields = ["NeedTitle"];
+export const ServiceuserAssessmentFormSearchableFields = ["myName","serviceUserIdNumber"];

@@ -2,63 +2,10 @@
 import { Schema, model, Model } from "mongoose";
 import { TServiceuserAssessmentForm } from "./serviceuserAssessmentForm.interface";
 
-const ContactSchema = new Schema(
-  {
-    name: { type: String },
-    address: { type: String },
-    telephone: { type: String },
-  },
-  { _id: false },
-);
-
-const MaintenanceOutcomeSchema = new Schema(
-  {
-    name: { type: String },
-    date: { type: Date },
-    desiredOutcome: { type: String },
-    whatICanStillDoForMyself: { type: String },
-    whatIFindDifficult: { type: String },
-    thingsIEnjoy: { type: String },
-    thingsIDoNotLike: { type: String },
-    howAndWhereIPreferToEat: { type: String },
-    thingsIMustHave: { type: String },
-    howYouCanHelpMe: { type: String },
-    identifiedRisks: { type: String },
-  },
-  { _id: false },
-);
-
-const ChangeOutcomeSchema = new Schema(
-  {
-    name: { type: String },
-    date: { type: Date },
-    desiredOutcome: { type: String },
-    howYouCanHelpMeImprove: { type: String },
-    howYouCanSupportMeToImprove: { type: String },
-    other: { type: String },
-  },
-  { _id: false },
-);
-
-const ServiceProcessOutcomeSchema = new Schema(
-  {
-    name: { type: String },
-    date: { type: Date },
-    desiredOutcome: { type: String },
-    howYouWillSupportMe: { type: String },
-  },
-  { _id: false },
-);
-
 const ServiceuserAssessmentFormSchema = new Schema<TServiceuserAssessmentForm>(
   {
     // Core identifiers
-    serviceUserIdNumber: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-    },
+    serviceUserIdNumber: { type: String, trim: true },
     dateOfAssessment: { type: Date },
     assessorName: { type: String },
     assessorSignature: { type: String },
@@ -77,18 +24,42 @@ const ServiceuserAssessmentFormSchema = new Schema<TServiceuserAssessmentForm>(
     tipsForTalkingToMe: { type: String },
     criticalCareAndSupportNeeds: [{ type: String }],
 
-    // Contacts
-    contacts: {
-      socialWorker: ContactSchema,
-      generalPractitioner: ContactSchema,
-      hospitalConsultants: ContactSchema,
-      pharmacist: ContactSchema,
-      communityNurse: ContactSchema,
-      nextOfKin1: ContactSchema,
-      nextOfKin2: ContactSchema,
-      keyHolder: ContactSchema,
-      otherAgency: ContactSchema,
-    },
+    // Contacts — flat fields, one Name/Address/Telephone per contact
+    socialWorkerName: { type: String },
+    socialWorkerAddress: { type: String },
+    socialWorkerTelephone: { type: String },
+
+    generalPractitionerName: { type: String },
+    generalPractitionerAddress: { type: String },
+    generalPractitionerTelephone: { type: String },
+
+    hospitalConsultantsName: { type: String },
+    hospitalConsultantsAddress: { type: String },
+    hospitalConsultantsTelephone: { type: String },
+
+    pharmacistName: { type: String },
+    pharmacistAddress: { type: String },
+    pharmacistTelephone: { type: String },
+
+    communityNurseName: { type: String },
+    communityNurseAddress: { type: String },
+    communityNurseTelephone: { type: String },
+
+    nextOfKin1Name: { type: String },
+    nextOfKin1Address: { type: String },
+    nextOfKin1Telephone: { type: String },
+
+    nextOfKin2Name: { type: String },
+    nextOfKin2Address: { type: String },
+    nextOfKin2Telephone: { type: String },
+
+    keyHolderName: { type: String },
+    keyHolderAddress: { type: String },
+    keyHolderTelephone: { type: String },
+
+    otherAgencyName: { type: String },
+    otherAgencyAddress: { type: String },
+    otherAgencyTelephone: { type: String },
 
     // Background / needs assessment
     importantAboutMyPast: { type: String },
@@ -104,23 +75,89 @@ const ServiceuserAssessmentFormSchema = new Schema<TServiceuserAssessmentForm>(
     howToHelpSustainMyBeliefs: { type: String },
     specificSupportInformation: { type: String },
 
-    // Outcomes
-    maintenancePreventionOutcomes: [MaintenanceOutcomeSchema],
-    changeOutcomes: [ChangeOutcomeSchema],
-    serviceProcessOutcomes: [ServiceProcessOutcomeSchema],
+    // Maintenance / Prevention Outcomes — 9 desired outcomes, each flattened out
+    // Outcome: My basic physical needs are being met
+    physicalNeedsCanDo: { type: String },
+    physicalNeedsFindDifficult: { type: String },
+    physicalNeedsHelp: { type: String },
+    physicalNeedsRisks: { type: String },
+
+    // Outcome: Being clean and presentable in appearance
+    cleanPresentableCanDo: { type: String },
+    cleanPresentableFindDifficult: { type: String },
+    cleanPresentableHelp: { type: String },
+    cleanPresentableRisks: { type: String },
+
+    // Outcome: Having appropriate food and drink at appropriate times
+    foodAndDrinkCanDo: { type: String },
+    foodAndDrinkFindDifficult: { type: String },
+    foodAndDrinkThingsIEnjoy: { type: String },
+    foodAndDrinkThingsIDoNotLike: { type: String },
+    foodAndDrinkHowAndWhereIPreferToEat: { type: String },
+    foodAndDrinkThingsIMustHave: { type: String },
+    foodAndDrinkHelp: { type: String },
+    foodAndDrinkRisks: { type: String },
+
+    // Outcome: Being physically comfortable
+    physicallyComfortableCanDo: { type: String },
+    physicallyComfortableFindDifficult: { type: String },
+    physicallyComfortableHelp: { type: String },
+    physicallyComfortableRisks: { type: String },
+
+    // Outcome: Ensuring personal safety and security
+    personalSafetyCanDo: { type: String },
+    personalSafetyFindDifficult: { type: String },
+    personalSafetyHelp: { type: String },
+    personalSafetyRisks: { type: String },
+
+    // Outcome: Having a clean and tidy home environment
+    cleanTidyHomeCanDo: { type: String },
+    cleanTidyHomeFindDifficult: { type: String },
+    cleanTidyHomeHelp: { type: String },
+    cleanTidyHomeRisks: { type: String },
+
+    // Outcome: Keeping alert and active
+    alertAndActiveCanDo: { type: String },
+    alertAndActiveFindDifficult: { type: String },
+    alertAndActiveHelp: { type: String },
+    alertAndActiveRisks: { type: String },
+
+    // Outcome: Having social contact & company
+    socialContactCanDo: { type: String },
+    socialContactFindDifficult: { type: String },
+    socialContactHelp: { type: String },
+    socialContactRisks: { type: String },
+
+    // Outcome: Having control over daily routines
+    dailyRoutinesCanDo: { type: String },
+    dailyRoutinesFindDifficult: { type: String },
+    dailyRoutinesHelp: { type: String },
+    dailyRoutinesRisks: { type: String },
+
+    // Change Outcomes
+    // Improvements in physical symptoms and / or behaviour
+    physicalSymptomsHelpImprove: { type: String },
+    physicalSymptomsSupportImprove: { type: String },
+    physicalSymptomsOther: { type: String },
+    // Improvements in morale and well-being
+    moraleWellbeingSupportImprove: { type: String },
+
+    // Service Process Outcomes
+    feelingValuedRespectedSupport: { type: String },
+    treatedAsIndividualSupport: { type: String },
+    sayAndControlSupport: { type: String },
+    culturalReligiousCompatibilitySupport: { type: String },
 
     // Sign-off
-    completedBy: { type: String },
+    completedBy: { type: Schema.Types.ObjectId,  ref: "User" },
     completedDate: { type: Date },
-    lastReviewedBy: { type: String },
+    lastReviewedBy: { type: Schema.Types.ObjectId,  ref: "User" },
     lastReviewedDate: { type: Date },
-    informationFrom: {
-      person: { type: Boolean, default: false },
-      relative: { type: Boolean, default: false },
-      agencies: { type: Boolean, default: false },
-      other: { type: Boolean, default: false },
-      observation: { type: Boolean, default: false },
-    },
+    informationFromPerson: { type: Boolean, default: false },
+    informationFromRelative: { type: Boolean, default: false },
+    informationFromAgencies: { type: Boolean, default: false },
+    informationFromOther: { type: Boolean, default: false },
+    informationFromObservation: { type: Boolean, default: false },
     signatureOfPerson: { type: String },
     signatureOfRelative: { type: String },
     isCompleted: { type: Boolean, default: false },
