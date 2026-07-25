@@ -271,6 +271,7 @@ const userSchema = new Schema<TUser, UserModel>(
     isEmployed: { type: String },
     currentEmployment: {
       employer: { type: String },
+      employerAddress:{ type: String },
       jobTitle: { type: String },
       startDate: { type: String },
       employmentType: { type: String },
@@ -282,6 +283,7 @@ const userSchema = new Schema<TUser, UserModel>(
     previousEmployments: [
       {
         employer: { type: String },
+        employerAddress:{ type: String },
         jobTitle: { type: String },
         startDate: { type: String },
         endDate: { type: String },
@@ -547,6 +549,12 @@ const userSchema = new Schema<TUser, UserModel>(
     bankDetailsDone: { type: Boolean, default: false },
     checkListDone: { type: Boolean, default: false },
     jobOfferMailSent: { type: Boolean, default: false },
+    jobOfferMailTemplate: { type: String, },
+    jobOfferMailSubject: { type: String, },
+    jobOfferMailSentDate: { type: Date, },
+    interviewMailTemplate: { type: String },
+    interviewMailSubject: { type: String },
+    interviewMailSentDate: { type: Date },
     interviewMailSent: { type: Boolean, default: false },
     referenceMailSent: { type: Boolean, default: false },
     jobContractDone: { type: Boolean, default: false },

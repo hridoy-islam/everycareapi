@@ -28,7 +28,9 @@ const createEmailIntoDB = async (payload: any) => {
       applicationId,
       jobOfferMailSent,
       interviewMailSent,
-      referenceMailSent
+      referenceMailSent,
+      jobOfferMailTemplate,
+      interviewMailTemplate
     } = payload;
 
     // Find user
@@ -197,24 +199,32 @@ const createEmailIntoDB = async (payload: any) => {
     }
 
     // ==========================================================
-    // ✅ NEW LOGIC: Update User flags based on Payload
+    // Update User flags, template & sentDate based on Payload
     // ==========================================================
-    
-    // Check if we need to update the User document
-    const userUpdates: Record<string, boolean> = {};
+
+    const userUpdates: Record<string, any> = {};
 
     if (jobOfferMailSent === true) {
       userUpdates.jobOfferMailSent = true;
+      if (jobOfferMailTemplate) {
+        userUpdates.jobOfferMailTemplate = jobOfferMailTemplate;
+      }
+      userUpdates.jobOfferMailSubject = emailSubject;
+      userUpdates.jobOfferMailSentDate = new Date();
     }
 
     if (interviewMailSent === true) {
       userUpdates.interviewMailSent = true;
+      if (interviewMailTemplate) {
+        userUpdates.interviewMailTemplate = interviewMailTemplate;
+      }
+      userUpdates.interviewMailSubject = emailSubject;
+      userUpdates.interviewMailSentDate = new Date();
     }
 
-    // Only make the DB call if there is something to update
     if (Object.keys(userUpdates).length > 0) {
       await User.findByIdAndUpdate(
-        userId, 
+        userId,
         userUpdates,
         { new: true }
       );

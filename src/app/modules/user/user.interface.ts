@@ -606,7 +606,13 @@ export interface TUser {
 
 
   jobOfferMailSent: boolean;
+  jobOfferMailTemplate?: string;
+  jobOfferMailSubject?: string;
+  jobOfferMailSentDate?: Date;
   interviewMailSent: boolean;
+  interviewMailTemplate?: string;
+  interviewMailSubject?: string;
+  interviewMailSentDate?: Date;
   referenceMailSent: boolean;
   postEmploymentUnlock: boolean;
   dbsUnlock: boolean;
