@@ -46,6 +46,8 @@ import { NeedsRoutes } from "../modules/needs/needs.route";
 import { ServiceuserNeedRoutes } from "../modules/serviceuserNeed/serviceuserNeed.route";
 import { ServiceuserEmergencyContractRoutes } from "../modules/serviceuserEmergencyContract/serviceuserEmergencyContract.route";
 import { ServiceuserAssessmentFormRoutes } from "../modules/serviceuserAssessmentForm/serviceuserAssessmentForm.route";
+import { CarePlanRoutes } from "../modules/careplan/careplan.route";
+import { MentalCapacityRoutes } from "../modules/mentalCapacity/mentalCapacity.route";
 
 const router = Router();
 
@@ -239,6 +241,14 @@ const moduleRoutes = [
   {
     path: "/serviceuser-assessment",
     route: ServiceuserAssessmentFormRoutes,
+  },
+  {
+    path: "/careplan",
+    route: CarePlanRoutes,
+  },
+  {
+    path: "/mental-capacity",
+    route: MentalCapacityRoutes,
   },
 
 
