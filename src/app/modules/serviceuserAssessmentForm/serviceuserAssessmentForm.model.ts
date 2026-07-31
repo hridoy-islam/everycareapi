@@ -161,6 +161,7 @@ const ServiceuserAssessmentFormSchema = new Schema<TServiceuserAssessmentForm>(
     signatureOfPerson: { type: String },
     signatureOfRelative: { type: String },
     isCompleted: { type: Boolean, default: false },
+     isServiceUser:{ type: Boolean, default: false },
   },
   {
     timestamps: true, // This will handle createdAt and updatedAt automatically

@@ -134,6 +134,7 @@ export interface TServiceuserAssessmentForm {
   signatureOfRelative?: string;
 
   isCompleted?: boolean;
+  isServiceUser?: boolean;
 
   // Timestamps
   createdAt?: Date;

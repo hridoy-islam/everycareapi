@@ -728,7 +728,7 @@ noRtwCheck:boolean;
   primaryBranch?: PrimaryBranch[];
   notes?: NoteItem[];
 
-
+serviceuserAssessmentId:Types.ObjectId;
 
   createdAt?: Date;
   updatedAt?: Date;

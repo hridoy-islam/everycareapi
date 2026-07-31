@@ -697,6 +697,9 @@ const userSchema = new Schema<TUser, UserModel>(
     },
     notes: [NotesSchema],
 
+
+    serviceuserAssessmentId:{ type: Schema.Types.ObjectId, ref: "ServiceuserAssessmentForm" }
+
   },
   {
     timestamps: true,
