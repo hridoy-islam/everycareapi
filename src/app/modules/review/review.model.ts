@@ -7,7 +7,7 @@ const ReviewSchema = new Schema<TReview>(
     serviceUserId: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: [true, "Service User is required"],
+      required: true,
     },
 
     // Review details
