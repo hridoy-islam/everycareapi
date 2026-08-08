@@ -23,8 +23,8 @@ const ReviewSchema = new Schema<TReview>(
     // Pre-review notes
     preReviewServiceUserComments: { type: String },
     preReviewCareManagerComments: { type: String },
-    morningVisitsFocus: { type: String },
-    eveningVisitsFocus: { type: String },
+    // morningVisitsFocus: { type: String },
+    // eveningVisitsFocus: { type: String },
     followUp: { type: String },
     preReviewNotes: { type: String },
 
@@ -36,7 +36,7 @@ const ReviewSchema = new Schema<TReview>(
     smartGoals: [
       {
         goalArea: { type: String },
-        timeFrame: { type: String },
+        timeFrame: { type: Date },
       },
     ],
 

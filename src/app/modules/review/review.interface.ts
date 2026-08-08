@@ -3,7 +3,7 @@ import { Model, Types } from "mongoose";
 
 export interface TReviewSmartGoal {
   goalArea?: string;
-  timeFrame?: string;
+  timeFrame?: Date;
 }
 
 export interface TReview {
