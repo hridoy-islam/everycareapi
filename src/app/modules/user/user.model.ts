@@ -552,6 +552,11 @@ const userSchema = new Schema<TUser, UserModel>(
     jobOfferMailTemplate: { type: String, },
     jobOfferMailSubject: { type: String, },
     jobOfferMailSentDate: { type: Date, },
+    inductionMailSent: { type: Boolean, default: false },
+inductionMailTemplate: { type: String },
+inductionMailSubject: { type: String },
+inductionMailSentDate: { type: Date },
+
     interviewMailTemplate: { type: String },
     interviewMailSubject: { type: String },
     interviewMailSentDate: { type: Date },

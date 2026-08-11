@@ -28,9 +28,11 @@ const createEmailIntoDB = async (payload: any) => {
       applicationId,
       jobOfferMailSent,
       interviewMailSent,
+      inductionMailSent,
       referenceMailSent,
       jobOfferMailTemplate,
-      interviewMailTemplate
+      interviewMailTemplate,
+      inductionMailTemplate
     } = payload;
 
     // Find user
@@ -179,13 +181,16 @@ const createEmailIntoDB = async (payload: any) => {
     // Determine the log action and type based on flags
     if (jobOfferMailSent === true) {
       logAction = `Job Offer Mail Sent to ${foundUser.name} for the role: ${applicationTitle}.`;
-     
+
     } else if (interviewMailSent === true) {
       logAction = `Interview Invitation Mail Sent to ${foundUser.name} for the role: ${applicationTitle}.`;
-      
-    }else {
+
+    } else if (inductionMailSent === true) {
+      logAction = `Induction Mail Sent to ${foundUser.name} for the role: ${applicationTitle}.`;
+
+    } else {
       logAction = `Email sent to ${foundUser.name}. Subject: "${processedSubject}"`;
- 
+
     }
 
     try {
@@ -220,6 +225,15 @@ const createEmailIntoDB = async (payload: any) => {
       }
       userUpdates.interviewMailSubject = emailSubject;
       userUpdates.interviewMailSentDate = new Date();
+    }
+
+    if (inductionMailSent === true) {
+      userUpdates.inductionMailSent = true;
+      if (inductionMailTemplate) {
+        userUpdates.inductionMailTemplate = inductionMailTemplate;
+      }
+      userUpdates.inductionMailSubject = emailSubject;
+      userUpdates.inductionMailSentDate = new Date();
     }
 
     if (Object.keys(userUpdates).length > 0) {

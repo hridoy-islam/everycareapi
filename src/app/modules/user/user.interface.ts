@@ -730,6 +730,13 @@ noRtwCheck:boolean;
 
 serviceuserAssessmentId:Types.ObjectId;
 
+
+ inductionMailSent: boolean;
+  inductionMailTemplate?: string;
+  inductionMailSubject?: string;
+  inductionMailSentDate?: Date;
+
+  
   createdAt?: Date;
   updatedAt?: Date;
 }
