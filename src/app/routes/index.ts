@@ -49,6 +49,7 @@ import { ServiceuserAssessmentFormRoutes } from "../modules/serviceuserAssessmen
 import { CarePlanRoutes } from "../modules/careplan/careplan.route";
 import { MentalCapacityRoutes } from "../modules/mentalCapacity/mentalCapacity.route";
 import { ReviewRoutes } from "../modules/review/review.route";
+import { RiskAssessmentRoutes } from "../modules/riskAssessment/riskAssessment.route";
 
 const router = Router();
 
@@ -255,8 +256,10 @@ const moduleRoutes = [
     path: "/review",
     route: ReviewRoutes,
   },
-
-
+  {
+    path: "/risk-assessment",
+    route: RiskAssessmentRoutes,
+  },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
