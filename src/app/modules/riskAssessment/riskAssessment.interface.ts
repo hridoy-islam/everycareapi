@@ -119,6 +119,11 @@ export interface TRiskAssessment {
 
   // 4B. Agreed Action
   agreedActionServiceUser?: string;
+  riskCookingComment?: string;
+  riskBathingComment?: string;
+  riskDressingComment?: string;
+  riskCleaningComment?: string;
+  riskOutingsComment?: string;
 
   // 4C. Risks to Health & Social Care Workers
   workerRiskCooking?: boolean;
@@ -128,6 +133,11 @@ export interface TRiskAssessment {
   workerRiskOutings?: boolean;
   workerRiskOther?: boolean;
   workerRiskOtherText?: string;
+  workerRiskCookingComment?: string;
+  workerRiskBathingComment?: string;
+  workerRiskDressingComment?: string;
+  workerRiskCleaningComment?: string;
+  workerRiskOutingsComment?: string;
 
   // 4D. Agreed Action Workers
   agreedActionWorkers?: string;
@@ -137,17 +147,31 @@ export interface TRiskAssessment {
   aggressiveBehaviourVerbalAction?: string;
   aggressiveBehaviourPhysical?: string;
   aggressiveBehaviourPhysicalAction?: string;
+  aggressiveBehaviourPhysical2?: string;
+  aggressiveBehaviourPhysicalAction2?: string;
+  aggressiveBehaviourPhysical3?: string;
+  aggressiveBehaviourPhysicalAction3?: string;
   criminalHistory?: boolean;
   criminalHistoryDetails?: string;
+  criminalHistoryDetails2?: string;
+  criminalHistoryDetails3?: string;
+  criminalHistoryCarer?: string;
+  criminalHistoryCarer2?: string;
+  criminalHistoryCarer3?: string;
 
   // Risk from Transmittable Diseases
   transmittableDiseases?: string;
+  transmittableDiseases2?: string;
+  transmittableDiseases3?: string;
+  transmittableDiseasesCarer?: string;
+  transmittableDiseasesCarer2?: string;
+  transmittableDiseasesCarer3?: string;
 
   // Section 5: Risks Associated with Environment
   section5Explanation?: string;
 
   // 5A. Type of Accommodation
-  accommodationType?: string;
+  accommodationType?: string[];
   accommodationOther?: string;
 
   // Directions / Travelling
@@ -157,9 +181,13 @@ export interface TRiskAssessment {
 
   // Safety Risks
   hasTelephone?: boolean;
+  hasTelephoneAction?: string;
   telephoneConcerns?: boolean;
+  telephoneConcernsAction?: string;
   highCrimeArea?: boolean;
+  highCrimeAreaAction?: string;
   areaIsolated?: boolean;
+  areaIsolatedAction?: string;
   safetyRisksComments?: string;
 
   // Services Location & Fire Hazards
@@ -170,6 +198,7 @@ export interface TRiskAssessment {
   electricMeterType?: string;
   lightingConcerns?: boolean;
   circuitBreaker?: boolean;
+  residualCurrentDevice?: boolean;
   heatingSource?: string;
   gasConcerns?: boolean;
   heatingConcerns?: boolean;
@@ -213,6 +242,7 @@ export interface TRiskAssessment {
 
   // Tasks & Equipment
   coshhSubstances?: boolean;
+  coshhRequiredSubstances?: boolean;
   coshhSheetsAvailable?: boolean;
   animalsInHome?: boolean;
   animalSafetyRisk?: boolean;
@@ -222,6 +252,7 @@ export interface TRiskAssessment {
   bodilyExcrements?: boolean;
   identifiedRisksStaff?: boolean;
   crackedWindows?: boolean;
+  crackedWindowsDoNotClean?: boolean;
   identifiedRisksServiceUser?: boolean;
   protectiveClothingNeeded?: boolean;
   risksToStaff?: boolean;
@@ -282,6 +313,7 @@ export interface TRiskAssessment {
   // Details (free text) for environment / premises / finance / food / outings checks
   electricalWiringConcernsDetails?: string;
   circuitBreakerDetails?: string;
+  residualCurrentDeviceDetails?: string;
   lightingConcernsDetails?: string;
   gasConcernsDetails?: string;
   heatingConcernsDetails?: string;
@@ -317,6 +349,7 @@ export interface TRiskAssessment {
   adaptationsConcernsDetails?: string;
   brokenGlazingDetails?: string;
   coshhSubstancesDetails?: string;
+  coshhRequiredSubstancesDetails?: string;
   coshhSheetsAvailableDetails?: string;
   animalsInHomeDetails?: string;
   animalSafetyRiskDetails?: string;
@@ -326,6 +359,7 @@ export interface TRiskAssessment {
   bodilyExcrementsDetails?: string;
   identifiedRisksStaffDetails?: string;
   crackedWindowsDetails?: string;
+  crackedWindowsDoNotCleanDetails?: string;
   identifiedRisksServiceUserDetails?: string;
   protectiveClothingNeededDetails?: string;
   risksToStaffDetails?: string;
