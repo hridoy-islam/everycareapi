@@ -267,6 +267,8 @@ const RiskAssessmentSchema = new Schema<TRiskAssessment>(
     equipmentServiceInterval: { type: String },
     equipmentServiceDate: { type: Date },
     hoistServiceDate: { type: Date },
+    equipmentName1: { type: String },
+    equipmentName2: { type: String },
 
     // Details (free text) for environment / premises / finance / food / outings checks
     electricalWiringConcernsDetails: { type: String },

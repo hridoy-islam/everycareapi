@@ -309,6 +309,8 @@ export interface TRiskAssessment {
   equipmentServiceInterval?: string;
   equipmentServiceDate?: Date;
   hoistServiceDate?: Date;
+  equipmentName1?: string;
+  equipmentName2?: string;
 
   // Details (free text) for environment / premises / finance / food / outings checks
   electricalWiringConcernsDetails?: string;
