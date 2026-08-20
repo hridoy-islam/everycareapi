@@ -299,6 +299,7 @@ export const updateUserIntoDB = async (id: string, payload: Partial<TUser> & { j
     employementContractDone: "Employment Contract completed.",
     jobContractDone: "Job Contract completed.",
     confidentialityFormDone: "Confidentiality Form completed.",
+    statementOfUnderstandingDone: "Statement of Understanding completed.",
   };
 
   for (const [field, logMessage] of Object.entries(completionFieldsMap)) {
@@ -461,6 +462,10 @@ export const updateUserIntoDB = async (id: string, payload: Partial<TUser> & { j
     confidentialityFormUnlock: {
       subject: "Confidentiality Form Section Unlocked",
       message: "Your Confidentiality Form section has been unlocked. You can now complete and submit the confidentiality agreement.",
+    },
+    statementOfUnderstandingUnlock: {
+      subject: "Statement of Understanding Section Unlocked",
+      message: "Your Statement of Understanding section has been unlocked. You can now complete and submit the Statement of Understanding.",
     },
   };
 

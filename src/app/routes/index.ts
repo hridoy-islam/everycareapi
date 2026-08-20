@@ -19,6 +19,7 @@ import { MedicalQuestionRoutes } from "../modules/postMedicalQuestion/medicalQue
 import { StarterChecklistRoutes } from "../modules/starterCheckListForm/starterCheckList.route";
 import { LogsRoutes } from "../modules/logs/logs.route";
 import { ConfidentialityFormRoutes } from "../modules/confidentialityForm/confidentialityForm.route";
+import { StatementOfUnderstandingRoutes } from "../modules/statementOfUnderstanding/statementOfUnderstanding.route";
 import { EmployementContractRoutes } from "../modules/employementContract/employementContract.route";
 import { JobContractRoutes } from "../modules/jobContract/jobContract.route";
 import { DesignationRoutes } from "../modules/designation/designation.router";
@@ -132,6 +133,10 @@ const moduleRoutes = [
   {
     path: "/confidentiality",
     route: ConfidentialityFormRoutes,
+  },
+  {
+    path: "/statement-of-understanding",
+    route: StatementOfUnderstandingRoutes,
   },
   {
     path: "/employement-contracts",

@@ -603,6 +603,7 @@ export interface TUser {
   checkListDone: boolean;
   jobContractDone: boolean;
   confidentialityFormDone: boolean;
+  statementOfUnderstandingDone: boolean;
 
 
   jobOfferMailSent: boolean;
@@ -621,6 +622,7 @@ export interface TUser {
   startDateUnlock: boolean;
   jobContractUnlock: boolean;
   confidentialityFormUnlock: boolean;
+  statementOfUnderstandingUnlock: boolean;
   contractTypeId: Types.ObjectId;
   jobContractTemplate: string;
   designationId: Types.ObjectId[];

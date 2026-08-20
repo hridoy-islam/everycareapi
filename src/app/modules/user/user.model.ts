@@ -5,10 +5,6 @@ import config from "../../config";
 import { UserStatus } from "./user.constant";
 import { TUser, UserModel } from "./user.interface";
 
-
-
-
-
 const RightToWorkSchema = new Schema({
   hasExpiry: {
     type: Boolean,
@@ -100,8 +96,6 @@ const NotesSchema = new Schema({
   note: { type: String },
 });
 
-
-
 const userSchema = new Schema<TUser, UserModel>(
   {
     name: { type: String },
@@ -117,7 +111,14 @@ const userSchema = new Schema<TUser, UserModel>(
     },
     role: {
       type: String,
-      enum: ["user", "admin", "student", "applicant","employee","serviceUser"],
+      enum: [
+        "user",
+        "admin",
+        "student",
+        "applicant",
+        "employee",
+        "serviceUser",
+      ],
       default: "applicant",
     },
     status: {
@@ -271,7 +272,7 @@ const userSchema = new Schema<TUser, UserModel>(
     isEmployed: { type: String },
     currentEmployment: {
       employer: { type: String },
-      employerAddress:{ type: String },
+      employerAddress: { type: String },
       jobTitle: { type: String },
       startDate: { type: String },
       employmentType: { type: String },
@@ -283,7 +284,7 @@ const userSchema = new Schema<TUser, UserModel>(
     previousEmployments: [
       {
         employer: { type: String },
-        employerAddress:{ type: String },
+        employerAddress: { type: String },
         jobTitle: { type: String },
         startDate: { type: String },
         endDate: { type: String },
@@ -548,14 +549,15 @@ const userSchema = new Schema<TUser, UserModel>(
     ecertDone: { type: Boolean, default: false },
     bankDetailsDone: { type: Boolean, default: false },
     checkListDone: { type: Boolean, default: false },
+    statementOfUnderstandingDone: { type: Boolean, default: false },
     jobOfferMailSent: { type: Boolean, default: false },
-    jobOfferMailTemplate: { type: String, },
-    jobOfferMailSubject: { type: String, },
-    jobOfferMailSentDate: { type: Date, },
+    jobOfferMailTemplate: { type: String },
+    jobOfferMailSubject: { type: String },
+    jobOfferMailSentDate: { type: Date },
     inductionMailSent: { type: Boolean, default: false },
-inductionMailTemplate: { type: String },
-inductionMailSubject: { type: String },
-inductionMailSentDate: { type: Date },
+    inductionMailTemplate: { type: String },
+    inductionMailSubject: { type: String },
+    inductionMailSentDate: { type: Date },
 
     interviewMailTemplate: { type: String },
     interviewMailSubject: { type: String },
@@ -574,6 +576,7 @@ inductionMailSentDate: { type: Date },
     contractTypeId: { type: Schema.Types.ObjectId, ref: "ContractType" },
     jobContractTemplate: { type: String },
     confidentialityFormUnlock: { type: Boolean, default: false },
+    statementOfUnderstandingUnlock: { type: Boolean, default: false },
     noRtwCheck: { type: Boolean },
     designationId: [
       {
@@ -582,25 +585,15 @@ inductionMailSentDate: { type: Date },
       },
     ],
 
-
-
-
-
-
-
-
-
-    
     // Finance
     accountNo: { type: String },
     beneficiary: { type: String },
     detailedBeneficiary: { type: BeneficiarySchema },
 
-
     middleInitial: { type: String },
-  
+
     preferredName: { type: String },
-    
+
     gender: { type: String },
     maritalStatus: { type: String },
     ethnicOrigin: { type: String },
@@ -619,7 +612,7 @@ inductionMailSentDate: { type: Date },
     otherPhone: { type: String },
     homePhone: { type: String },
     website: { type: String },
-    themeColor:{type:String, default:'#6651c2'},
+    themeColor: { type: String, default: "#6651c2" },
 
     // Employment / Service Details
     startDate: { type: Date },
@@ -631,7 +624,7 @@ inductionMailSentDate: { type: Date },
     timesheetSignatureNote: { type: String },
 
     // Employee model fields
-    contractHours:{type:Number},
+    contractHours: { type: Number },
     nhsNumber: { type: String },
     applicationDate: { type: Date },
     availableFrom: { type: Date },
@@ -650,7 +643,6 @@ inductionMailSentDate: { type: Date },
     recruitmentId: { type: Schema.Types.ObjectId, ref: "Recruitment" },
     applicantId: { type: Schema.Types.ObjectId, ref: "Applicant" },
 
- 
     equalityInformation: { type: EqualityInformationSchema },
 
     // Payroll & compliance
@@ -702,9 +694,10 @@ inductionMailSentDate: { type: Date },
     },
     notes: [NotesSchema],
 
-
-    serviceuserAssessmentId:{ type: Schema.Types.ObjectId, ref: "ServiceuserAssessmentForm" }
-
+    serviceuserAssessmentId: {
+      type: Schema.Types.ObjectId,
+      ref: "ServiceuserAssessmentForm",
+    },
   },
   {
     timestamps: true,
