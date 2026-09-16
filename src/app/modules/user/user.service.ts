@@ -251,14 +251,20 @@ const scheduleRecurringEmails = (email: string, name: string) => {
 
 
 
-export const updateUserIntoDB = async (id: string, payload: Partial<TUser> & { jobApplicationId?: string }) => {
+export const updateUserIntoDB = async (
+  id: string,
+  payload: Partial<TUser> & {
+    jobApplicationId?: string;
+    referenceTarget?: "ref1" | "ref2" | "ref3";
+  }
+) => {
   const user = await User.findById(id);
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
   }
 
-  // ✅ Pull jobApplicationId out so it never gets saved onto the User doc
-  const { jobApplicationId, ...userPayload } = payload;
+  // ✅ Pull jobApplicationId / referenceTarget out so they never get saved onto the User doc
+  const { jobApplicationId, referenceTarget, ...userPayload } = payload;
 
    const isNameUpdating = 
     userPayload.title !== undefined || 
@@ -285,7 +291,7 @@ export const updateUserIntoDB = async (id: string, payload: Partial<TUser> & { j
     payload.password = await bcrypt.hash(payload.password, Number(config.bcrypt_salt_rounds));
   }
   // ✅ Update user data
-  const result = await User.findByIdAndUpdate(id, userPayload, {
+  let result = await User.findByIdAndUpdate(id, userPayload, {
     new: true,
     runValidators: true,
   });
@@ -373,8 +379,23 @@ export const updateUserIntoDB = async (id: string, payload: Partial<TUser> & { j
           },
         ];
 
-        for (const ref of referenceData) {
-          if (ref?.refEmail && ref?.refFlag === false) {
+        // A referenceTarget means the admin asked for one specific referee
+        // (send or resend), so only that one is processed.
+        const targetedRefs = referenceTarget
+          ? referenceData.filter((ref) => ref.refType === referenceTarget)
+          : referenceData;
+
+        const sentTracking: Record<string, boolean | Date> = {};
+
+        for (const ref of targetedRefs) {
+          const refEmail = ref?.refEmail;
+          // An explicit target is an admin-initiated (re)send, so it goes out
+          // even if that referee already has a submission on file.
+          const shouldSend = referenceTarget
+            ? !!refEmail
+            : !!refEmail && ref?.refFlag === false;
+
+          if (refEmail && shouldSend) {
             try {
               const basePath =
                 ref.refType === "ref3" ? "personal" : "professional";
@@ -393,7 +414,7 @@ export const updateUserIntoDB = async (id: string, payload: Partial<TUser> & { j
               )}&${randomToken}`;
 
               await sendEmailToReference(
-                ref.refEmail,
+                refEmail,
                 "reference-letter",
                 `Reference Request for ${applicantName}`,
                 applicantName,
@@ -402,10 +423,13 @@ export const updateUserIntoDB = async (id: string, payload: Partial<TUser> & { j
                 jobRole
               );
 
+              sentTracking[`${ref.refType}MailSent`] = true;
+              sentTracking[`${ref.refType}MailSentDate`] = new Date();
+
               try {
                 await Logs.create({
                   userId: id,
-                  action: `Reference Request Sent: ${ref.refType} to ${ref.refName} (${ref.refEmail}).`,
+                  action: `Reference Request Sent: ${ref.refType} to ${ref.refName} (${refEmail}).`,
                 });
               } catch (logError) {
                 console.error(
@@ -415,11 +439,18 @@ export const updateUserIntoDB = async (id: string, payload: Partial<TUser> & { j
               }
             } catch (error) {
               console.error(
-                `❌ Failed to send reference email to ${ref.refEmail}:`,
+                `❌ Failed to send reference email to ${refEmail}:`,
                 error
               );
             }
           }
+        }
+
+        // ✅ Persist per-referee send status so the UI can show it individually
+        if (Object.keys(sentTracking).length > 0) {
+          result =
+            (await User.findByIdAndUpdate(id, sentTracking, { new: true })) ||
+            result;
         }
       } else {
         console.error(

@@ -564,6 +564,12 @@ const userSchema = new Schema<TUser, UserModel>(
     interviewMailSentDate: { type: Date },
     interviewMailSent: { type: Boolean, default: false },
     referenceMailSent: { type: Boolean, default: false },
+    ref1MailSent: { type: Boolean, default: false },
+    ref2MailSent: { type: Boolean, default: false },
+    ref3MailSent: { type: Boolean, default: false },
+    ref1MailSentDate: { type: Date },
+    ref2MailSentDate: { type: Date },
+    ref3MailSentDate: { type: Date },
     jobContractDone: { type: Boolean, default: false },
     confidentialityFormDone: { type: Boolean, default: false },
 

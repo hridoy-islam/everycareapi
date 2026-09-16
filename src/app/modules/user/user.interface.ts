@@ -615,6 +615,12 @@ export interface TUser {
   interviewMailSubject?: string;
   interviewMailSentDate?: Date;
   referenceMailSent: boolean;
+  ref1MailSent?: boolean;
+  ref2MailSent?: boolean;
+  ref3MailSent?: boolean;
+  ref1MailSentDate?: Date;
+  ref2MailSentDate?: Date;
+  ref3MailSentDate?: Date;
   postEmploymentUnlock: boolean;
   dbsUnlock: boolean;
   ecertUnlock: boolean;

@@ -17,7 +17,8 @@ const UploadDocumentToGCS = async (file: any, payload: any) => {
   try {
     if (!file) throw new AppError(httpStatus.BAD_REQUEST, "No file provided");
 
-    const fileName = `${Date.now()}-${file.originalname}`;
+    const sanitizedName = file.originalname.replace(/\s+/g, "-");
+    const fileName = `${Date.now()}-${sanitizedName}`;
     const gcsFile = bucket.file(fileName);
 
     await new Promise((resolve, reject) => {
