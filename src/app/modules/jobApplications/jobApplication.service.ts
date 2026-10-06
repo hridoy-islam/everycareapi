@@ -122,38 +122,16 @@ interface PopulatedJobApplication extends Omit<TJobApplication, "jobId" | "appli
 }
 
 
-const createJobApplicationIntoDB = async (
-  payload: Partial<TJobApplication>
-) => {
-
-  if (!payload.jobId || !payload.applicantId) {
-    throw new Error("Both jobId and applicantId are required");
-  }
-
-  // Check if application already exists for this jobId and applicantId
-  const existingApplication = await JobApplication.findOne({
-    jobId: payload.jobId,
-    applicantId: payload.applicantId
-  });
-
-  if (existingApplication) {
-    throw new Error("You have already applied for this job.");
-  }
-
-
-
-  const result = await JobApplication.create(payload);
-
-  const populatedResult = await JobApplication.findById(result._id)
+/**
+ * Sends the "thank you for applying" mail to the applicant and the "new
+ * application" mail to the admin, then marks the application as notified.
+ */
+const sendApplicationEmails = async (applicationId: any) => {
+  const populatedResult = await JobApplication.findById(applicationId)
     .populate("jobId", "jobTitle")
-    .populate("applicantId", "name email availableFromDate phone dateOfBirth countryOfResidence ref1Submit ref2Submit ref3Submit professionalReferee1 professionalReferee2 personalReferee isCompleted") as unknown as PopulatedJobApplication;
+    .populate("applicantId", "name email availableFromDate phone dateOfBirth countryOfResidence") as unknown as PopulatedJobApplication;
 
-  if (!populatedResult) {
-    throw new Error("Failed to populate job application");
-  }
-
-  const applicant = populatedResult.applicantId;
-  const jobRole = populatedResult.jobId?.jobTitle || "";
+  if (!populatedResult) return;
 
   const title = populatedResult?.jobId?.jobTitle;
   const applicantName = populatedResult?.applicantId?.name;
@@ -161,7 +139,6 @@ const createJobApplicationIntoDB = async (
 
   const emailSubject = `Thank you for applying to Everycare`;
   const otp = "";
-
 
   const phone = (populatedResult?.applicantId as any)?.phone;
   const countryOfResidence = (populatedResult?.applicantId as any)?.countryOfResidence;
@@ -174,8 +151,6 @@ const createJobApplicationIntoDB = async (
   const availableFromDate = (populatedResult?.applicantId as any)?.availableFromDate;
   const formattedAvailableFromDate = availableFromDate ? moment(availableFromDate).format("DD MMM, YYYY") : "N/A";
   const adminSubject = `New Application Received: ${title}`;
-
-
 
   await sendEmail(
     applicantEmail,
@@ -199,6 +174,81 @@ const createJobApplicationIntoDB = async (
     formattedDob,
     formattedAvailableFromDate
   );
+
+  await JobApplication.findByIdAndUpdate(applicationId, { notified: true });
+};
+
+/**
+ * Applications made before the applicant finished their profile had their
+ * mails held back. Called when the profile becomes complete, so each one is
+ * mailed exactly once, with the details filled in.
+ */
+export const sendPendingJobApplicationEmails = async (applicantId: any) => {
+  const applicant = await User.findById(applicantId).select("isCompleted");
+  if (!applicant?.isCompleted) return;
+
+  const pending = await JobApplication.find({ applicantId, notified: false });
+  for (const application of pending) {
+    try {
+      await sendApplicationEmails(application._id);
+    } catch (error) {
+      console.error(
+        `❌ Failed to send held-back emails for job application ${application._id}:`,
+        error
+      );
+    }
+  }
+};
+
+const createJobApplicationIntoDB = async (
+  payload: Partial<TJobApplication>
+) => {
+
+  if (!payload.jobId || !payload.applicantId) {
+    throw new Error("Both jobId and applicantId are required");
+  }
+
+  // Check if application already exists for this jobId and applicantId
+  const existingApplication = await JobApplication.findOne({
+    jobId: payload.jobId,
+    applicantId: payload.applicantId
+  });
+
+  if (existingApplication) {
+    throw new Error("You have already applied for this job.");
+  }
+
+
+
+  // The "application received" mails only go out once the applicant has
+  // completed their profile; until then they are held back (notified: false)
+  // and sent by sendPendingJobApplicationEmails when the profile is completed.
+  const applicantUser = await User.findById(payload.applicantId).select("isCompleted");
+  const isProfileCompleted = applicantUser?.isCompleted === true;
+
+  const result = await JobApplication.create({
+    ...payload,
+    notified: false,
+  });
+
+  if (isProfileCompleted) {
+    await sendApplicationEmails(result._id);
+  }
+
+  // Still needed for the reference emails below.
+  const populatedResult = await JobApplication.findById(result._id)
+    .populate("jobId", "jobTitle")
+    .populate("applicantId", "name email ref1Submit ref2Submit ref3Submit professionalReferee1 professionalReferee2 personalReferee isCompleted") as unknown as PopulatedJobApplication;
+
+  if (!populatedResult) {
+    throw new Error("Failed to populate job application");
+  }
+
+  const applicant = populatedResult.applicantId;
+  const jobRole = populatedResult.jobId?.jobTitle || "";
+  const applicantName = populatedResult?.applicantId?.name;
+  const applicantEmail = populatedResult?.applicantId?.email;
+
   interface Referee {
     name?: string;
     email?: string;

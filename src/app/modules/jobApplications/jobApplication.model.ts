@@ -13,6 +13,10 @@ const JobApplicationSchema = new Schema<TJobApplication>(
       enum: ["recruit", "rejected", "applied"],
       default: "applied",
     },
+    // The applicant and admin "application received" mails. false while they
+    // are held back for an unfinished profile, true once sent. Applications
+    // from before this flag existed have no value and are never re-sent.
+    notified: { type: Boolean },
   },
   {
     timestamps: true,

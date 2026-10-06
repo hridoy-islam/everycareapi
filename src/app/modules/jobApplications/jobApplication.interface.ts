@@ -6,4 +6,5 @@ export interface TJobApplication {
   applicantId: Types.ObjectId;
   seen: boolean;
   status: string
+  notified?: boolean;
 }

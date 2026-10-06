@@ -6,6 +6,7 @@ import { User } from "./user.model";
 import AppError from "../../errors/AppError";
 import { sendEmailToReference } from "../../utils/sendEmailToReference";
 import { JobApplication } from "../jobApplications/jobApplication.model";
+import { sendPendingJobApplicationEmails } from "../jobApplications/jobApplication.service";
 import crypto from "crypto";
 import { sendModuleEmail } from "../../utils/sendModulesEmail";
 import Logs from "../logs/logs.model";
@@ -331,6 +332,17 @@ export const updateUserIntoDB = async (
       console.error(
         `❌ Failed to create log for profile completion:`,
         logError
+      );
+    }
+
+    // Applications made while the profile was unfinished get their
+    // "application received" mails now.
+    try {
+      await sendPendingJobApplicationEmails(id);
+    } catch (mailError) {
+      console.error(
+        `❌ Failed to send held-back job application emails:`,
+        mailError
       );
     }
   }
